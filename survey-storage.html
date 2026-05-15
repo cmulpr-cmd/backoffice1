@@ -449,60 +449,6 @@
   }
   .rec .c { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-  /* RAW RESPONSES TABLE */
-  .responses-detail { display: grid; gap: 16px; }
-  .resp {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 28px;
-    box-shadow: var(--shadow-sm);
-  }
-  .resp-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-light);
-    flex-wrap: wrap;
-  }
-  .resp-head .nm {
-    font-family: 'Prompt', sans-serif;
-    font-weight: 600;
-    font-size: 18px;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .resp-head .nm .id {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    background: var(--bg-body);
-    color: var(--text-muted);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-weight: 600;
-  }
-  .resp-head .dept { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 12px; }
-  .resp-row {
-    display: grid; grid-template-columns: 220px 1fr; gap: 16px;
-    padding: 12px 0; align-items: baseline; border-bottom: 1px dashed var(--border-light);
-  }
-  .resp-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .resp-row .k { font-family: 'Prompt', sans-serif; font-size: 14px; color: var(--text-muted); font-weight: 500; }
-  .resp-row .v { color: var(--text-main); line-height: 1.6; font-size: 15px; }
-  
-  .pill {
-    display: inline-block; padding: 4px 12px; background: var(--bg-body);
-    border-radius: 20px; font-size: 13px; color: var(--text-main);
-    margin: 4px 6px 4px 0; border: 1px solid var(--border);
-  }
-  .pill.ok { background: #EFF6FF; color: #2563EB; border-color: #BFDBFE; font-weight: 600; }
-  .pill.warn { background: #F8FAFC; color: #475569; border-color: #CBD5E1; font-weight: 600; }
-
   /* FOOTER */
   footer {
     margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border);
@@ -526,7 +472,6 @@
     .wrap { padding: 0 24px 80px; }
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
-    .resp-row { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
     .section-head { flex-direction: column; align-items: flex-start; }
     .section-head p { text-align: left; }
     .insight { grid-template-columns: 1fr; gap: 16px; }
@@ -828,14 +773,6 @@
         <div class="qm"><span><strong>ผู้ตอบ #09</strong></span><span>งานนโยบายและแผน</span></div>
       </div>
     </div>
-  </section>
-
-  <section class="reveal">
-    <div class="section-head">
-      <h2><span class="num">12</span>รายละเอียดผู้ตอบรายบุคคล</h2>
-      <p>ข้อมูลครบทั้งหมด 10 รายการ เลื่อนดูได้</p>
-    </div>
-    <div class="responses-detail" id="respList"></div>
   </section>
 
   <footer>
@@ -1316,36 +1253,6 @@ new Chart(document.getElementById('chWill'), {
       y:{grid:{display:false}, ticks:{color:INK, font:{weight:'500',size:13}}}
     }
   }
-});
-
-// ============= RESPONSES TABLE =============
-const list = document.getElementById('respList');
-SURVEY.forEach(r => {
-  const tagsArr = (arr) => arr.length ? arr.map(t=>`<span class="pill">${t}</span>`).join('') : '<span class="pill">—</span>';
-  const diskPill = r.disk==='เพียงพอ'
-    ? '<span class="pill ok">✓ เพียงพอ</span>'
-    : '<span class="pill warn">✗ ไม่เพียงพอ</span>';
-  const nasPill = r.nasUse==='เคยใช้งาน'
-    ? '<span class="pill ok">✓ เคยใช้ NAS</span>'
-    : '<span class="pill warn">✗ ไม่เคยใช้ NAS</span>';
-  list.insertAdjacentHTML('beforeend', `
-    <div class="resp">
-      <div class="resp-head">
-        <div class="nm"><span class="id">#${String(r.id).padStart(2,'0')}</span>${r.dept}</div>
-        <div class="dept">${diskPill} ${nasPill}</div>
-      </div>
-      <div class="resp-row"><div class="k">วิธีทำงานหลัก</div><div class="v">${tagsArr(r.method)}</div></div>
-      <div class="resp-row"><div class="k">เหตุผลที่เลือก</div><div class="v">${tagsArr(r.reasons)}</div></div>
-      <div class="resp-row"><div class="k">Cloud ใช้แบบ</div><div class="v">${r.cloud}</div></div>
-      <div class="resp-row"><div class="k">จ่ายเงิน/เพิ่มความจุ</div><div class="v">${r.spend} · ${r.capacity}</div></div>
-      <div class="resp-row"><div class="k">พอใช้หรือไม่</div><div class="v">${r.sufficient}</div></div>
-      <div class="resp-row"><div class="k">ไฟล์ที่ใช้พื้นที่มาก</div><div class="v">${tagsArr(r.fileTypes)}</div></div>
-      <div class="resp-row"><div class="k">จำรหัส NAS</div><div class="v">${r.nasPwd}</div></div>
-      <div class="resp-row"><div class="k">อุปสรรค NAS</div><div class="v">${tagsArr(r.nasIssues)}</div></div>
-      <div class="resp-row"><div class="k">แผนซื้อเพิ่ม</div><div class="v">${r.futurePlan}</div></div>
-      <div class="resp-row"><div class="k">ข้อเสนอแนะ</div><div class="v">${r.suggest}</div></div>
-    </div>
-  `);
 });
 </script>
 
