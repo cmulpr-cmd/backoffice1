@@ -461,96 +461,6 @@
     font-size: 15px;
   }
 
-  /* RAW RESPONSES TABLE */
-  .responses-detail {
-    display: grid;
-    gap: 16px;
-  }
-  .resp {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 28px;
-    box-shadow: var(--shadow-sm);
-  }
-  .resp-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-light);
-    flex-wrap: wrap;
-  }
-  .resp-head .nm {
-    font-family: 'Prompt', sans-serif;
-    font-weight: 600;
-    font-size: 18px;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .resp-head .nm .id {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    background: var(--bg-body);
-    color: var(--text-muted);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-weight: 600;
-  }
-  .resp-head .dept {
-    font-size: 14px;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .resp-row {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 16px;
-    padding: 12px 0;
-    align-items: baseline;
-    border-bottom: 1px dashed var(--border-light);
-  }
-  .resp-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .resp-row .k {
-    font-family: 'Prompt', sans-serif;
-    font-size: 14px;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-  .resp-row .v {
-    color: var(--text-main);
-    line-height: 1.6;
-    font-size: 15px;
-  }
-  .pill {
-    display: inline-block;
-    padding: 4px 12px;
-    background: var(--bg-body);
-    border-radius: 20px;
-    font-size: 13px;
-    color: var(--text-main);
-    margin: 4px 6px 4px 0;
-    border: 1px solid var(--border);
-  }
-  .pill.has { 
-    background: #ECFDF5; 
-    color: #059669; 
-    border-color: #A7F3D0; 
-    font-weight: 600; 
-  }
-  .pill.no { 
-    background: #FEF2F2; 
-    color: #DC2626; 
-    border-color: #FECACA; 
-    font-weight: 600; 
-  }
-
   /* FOOTER */
   footer {
     margin-top: 80px;
@@ -588,7 +498,6 @@
     .wrap { padding: 0 24px 80px; }
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
-    .resp-row { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
     .section-head { flex-direction: column; align-items: flex-start; }
     .section-head p { text-align: left; }
   }
@@ -805,25 +714,17 @@
     <div class="quotes">
       <div class="quote">
         <p class="qt">ควรมีการอบรมการใช้งาน AI ให้บุคลากรอย่างต่อเนื่อง พร้อมกำหนดแนวทางการใช้งานที่เหมาะสมและปลอดภัย เพื่อให้สามารถนำ AI มาช่วยเพิ่มประสิทธิภาพการทำงาน ลดภาระงานซ้ำซ้อน และพัฒนาคุณภาพงานของหน่วยงานได้อย่างเต็มประสิทธิภาพ</p>
-        <div class="qm"><strong>วรรัตน์ อุ่นเมืองอินทร์</strong><span>งานนโยบายและแผน</span></div>
+        <div class="qm"><strong>ความคิดเห็นส่วนหนึ่งงานนโยบายและแผน</strong>/div>
       </div>
       <div class="quote">
         <p class="qt">อยากให้จัดซื้อ Claude AI หรืออื่นใดที่เหมาะสมกับงานแต่ละท่านเพื่อ LEAN ขั้นตอน รวมถึงการจัดทำภาพเพื่อนำเสนอผ่านคอนเทนต์ การเขียน coding และจัดทำ SEO to HTML file</p>
-        <div class="qm"><strong>เธียรวิชญ์ พิชญนันท์กุล</strong><span>งานบริหารทั่วไป</span></div>
+        <div class="qm"><strong>ความคิดเห็นส่วนหนึ่งงานบริหารทั่วไป</strong></div>
       </div>
       <div class="quote">
         <p class="qt">ต้องใช้ระยะเวลาในการศึกษา เพื่อจะได้ทราบว่าภาระงานที่รับผิดชอบเหมาะสมกับ AI ประเภทใด — ตอนนี้มุ่งเน้นเรื่องการช่วยจัดทำข้อมูล วิเคราะห์ข้อมูลและการนำเสนอข้อมูล</p>
-        <div class="qm"><strong>ผู้ตอบหมายเลข 4</strong><span>งานการเงินการคลังและพัสดุ</span></div>
+        <div class="qm"><strong>ความคิดเห็นส่วนหนึ่งงานการเงินการคลังและพัสดุ</strong></div>
       </div>
     </div>
-  </section>
-
-  <section class="reveal">
-    <div class="section-head">
-      <h2><span class="num">08</span>รายละเอียดผู้ตอบรายบุคคล</h2>
-      <p>ข้อมูลครบทั้งหมด 9 รายการ เลื่อนดูได้</p>
-    </div>
-    <div class="responses-detail" id="respList"></div>
   </section>
 
   <footer>
@@ -1192,32 +1093,6 @@ new Chart(document.getElementById('chSpend'), {
   }
 });
 
-// ============= RESPONSES TABLE =============
-const list = document.getElementById('respList');
-SURVEY.forEach(r => {
-  const toolsHtml = r.tools.length
-    ? r.tools.map(t => `<span class="pill">${t}</span>`).join('')
-    : '<span class="pill">—</span>';
-  const usePill = r.useAI
-    ? '<span class="pill has">✓ ใช้งาน</span>'
-    : '<span class="pill no">✗ ยังไม่ใช้</span>';
-  list.insertAdjacentHTML('beforeend', `
-    <div class="resp">
-      <div class="resp-head">
-        <div class="nm"><span class="id">#${String(r.id).padStart(2,'0')}</span>${r.name}</div>
-        <div class="dept">${r.dept} ${usePill}</div>
-      </div>
-      <div class="resp-row"><div class="k">เครื่องมือที่ใช้</div><div class="v">${toolsHtml}</div></div>
-      <div class="resp-row"><div class="k">ใช้ทำอะไร</div><div class="v">${r.forWhat||'—'}</div></div>
-      <div class="resp-row"><div class="k">ค่าใช้จ่าย/เดือน</div><div class="v">${r.spend||'—'}</div></div>
-      <div class="resp-row"><div class="k">เครื่องมือที่ต้องการ</div><div class="v">${r.wanted||'—'}</div></div>
-      <div class="resp-row"><div class="k">ความสามารถที่อยากได้</div><div class="v">${r.cap||'—'}</div></div>
-      <div class="resp-row"><div class="k">งานที่อยากให้ AI ช่วย</div><div class="v">${r.task||'—'}</div></div>
-      <div class="resp-row"><div class="k">งานที่ยังไม่รู้ใช้อะไร</div><div class="v">${r.unknown||'—'}</div></div>
-      <div class="resp-row"><div class="k">ข้อเสนอแนะ</div><div class="v">${r.sugg||'—'}</div></div>
-    </div>
-  `);
-});
 </script>
 
 </body>
