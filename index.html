@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลักสำนักงาน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ตั้งค่าพื้นฐาน */
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ส่วนหัวเรื่อง (Header) */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #1e1e2f;
+        }
+
+        .view-all {
+            text-decoration: none;
+            color: #6366f1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        /* ตารางกริดสำหรับปุ่มต่างๆ */
+        .grid-container {
+            display: grid;
+            /* ปรับจำนวนคอลัมน์อัตโนมัติ ให้กว้างอย่างน้อย 160px */
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        /* ดีไซน์ของการ์ดแต่ละใบ */
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ดีไซน์ไอคอน */
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            margin: 0 0 10px 0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #6c757d;
+            margin: 0;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* ลูกศรชี้ขวาที่มุมล่าง */
+        .arrow-icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            color: #4b5563;
+            font-size: 14px;
+        }
+
+        /* สีพื้นหลังของไอคอนแต่ละหมวด (สามารถเปลี่ยนโค้ดสีได้) */
+        .bg-purple { background-color: #8b5cf6; }
+        .bg-blue { background-color: #3b82f6; }
+        .bg-teal { background-color: #2dd4bf; }
+        .bg-orange { background-color: #f59e0b; }
+        .bg-pink { background-color: #ec4899; }
+        .bg-indigo { background-color: #6366f1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="section-header">
+            <h2>สำนักงานเลขาธิการ (ชื่อหน่วยงานของคุณ)</h2>
+            <a href="#" class="view-all">ดูข้อมูลทั้งหมด <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="grid-container">
+            
+            <a href="document-work.html" class="card">
+                <div class="icon-circle bg-purple">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <h3>งานสารบรรณ</h3>
+                <p>ระบบรับ-ส่ง หนังสือราชการ และเอกสารต่างๆ ภายในหน่วยงาน</p>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="hr-work.html" class="card">
+                <div class="icon-circle bg-blue">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>งานการเจ้าหน้าที่</h3>
+                <p>ข้อมูลบุคลากร การลา เลื่อนขั้น สวัสดิการ และการประเมินผล</p>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="finance-work.html" class="card">
+                <div class="icon-circle bg-teal">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3>งานคลังและพัสดุ</h3>
+                <p>ระบบเบิกจ่ายงบประมาณ การจัดซื้อจัดจ้าง และการเบิกพัสดุ</p>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="planning-work.html" class="card">
+                <div class="icon-circle bg-orange">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>นโยบายและแผน</h3>
+                <p>แผนปฏิบัติการประจำปี การติดตามผล และตัวชี้วัด (KPIs)</p>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="pr-work.html" class="card">
+                <div class="icon-circle bg-pink">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h3>งานประชาสัมพันธ์</h3>
+                <p>ข่าวสาร ประกาศ กิจกรรม และภาพลักษณ์ขององค์กร</p>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="it-work.html" class="card">
+                <div class="icon-circle bg-indigo">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3>เทคโนโลยีสารสนเทศ</h3>
+                <p>แจ้งซ่อมอุปกรณ์คอมพิวเตอร์ ระบบเครือข่าย และซอฟต์แวร์</p>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>
