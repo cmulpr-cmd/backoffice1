@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายงานผลแบบสำรวจการประยุกต์ใช้เทคโนโลยี AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  :root {
+    --ink: #0E1A2B;
+    --ink-2: #14253D;
+    --paper: #F5F1E8;
+    --paper-2: #EBE4D2;
+    --paper-3: #FFFCF5;
+    --accent: #E8553A;
+    --accent-2: #F2A65A;
+    --accent-3: #2B6E72;
+    --accent-4: #8B5E83;
+    --muted: #6B7A8E;
+    --line: rgba(14, 26, 43, 0.12);
+    --line-strong: rgba(14, 26, 43, 0.25);
+    --shadow: 0 1px 0 rgba(14,26,43,0.04), 0 10px 30px -10px rgba(14,26,43,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(232, 85, 58, 0.06), transparent 35%),
+      radial-gradient(circle at 85% 90%, rgba(43, 110, 114, 0.06), transparent 40%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  /* Grainy texture overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    mix-blend-mode: multiply;
+  }
+
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px 120px;
+  }
+
+  /* HEADER */
+  header.masthead {
+    padding: 48px 0 32px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .kicker::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--accent);
+  }
+  h1.title {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 800;
+    font-size: clamp(38px, 5.5vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 980px;
+  }
+  h1.title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .sub {
+    margin-top: 22px;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 720px;
+    line-height: 1.65;
+  }
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 40px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .meta-strip div span {
+    display: block;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    letter-spacing: 0;
+  }
+
+  /* SECTION HEADERS */
+  .section-head {
+    margin: 80px 0 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+  }
+  .section-head h2 {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .section-head h2 .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    background: rgba(232, 85, 58, 0.08);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+  }
+  .section-head p {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 380px;
+    text-align: right;
+  }
+
+  /* KPI ROW */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .kpi {
+    background: var(--paper-3);
+    border: 1px solid var(--line);
+    padding: 24px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .kpi:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .kpi-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .kpi-value {
+    font-family: 'Prompt', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+  }
+  .kpi-value .unit {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+  .kpi-foot {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+  .kpi.accent { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .kpi.accent .kpi-label { color: var(--accent-2); }
+  .kpi.accent .kpi-value { color: var(--paper); }
+  .kpi.accent .kpi-value .unit { color: var(--accent-2); }
+  .kpi.accent .kpi-foot { color: rgba(245, 241, 232, 0.65); }
+
+  /* CHART CARDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-3-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+
+  .card {
+    background: var(--paper-3);
+    border: 1px solid var(--line);
+    padding: 28px;
+    position: relative;
+  }
+  .card-title {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    letter-spacing: -0.005em;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .chart-box {
+    position: relative;
+    height: 320px;
+  }
+  .chart-box.tall { height: 380px; }
+  .chart-box.short { height: 240px; }
+
+  /* CATEGORY MERGE CONTROLS */
+  .merge-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--paper-2);
+    border: 1px dashed var(--line-strong);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .merge-bar .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: 100px;
+    border: 1px solid var(--line-strong);
+    background: var(--paper-3);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .chip:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip.active { background: var(--accent); color: var(--paper-3); border-color: var(--accent); }
+  .chip .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted);
+  }
+  .chip.active .dot { background: var(--paper-3); }
+  .chip-action {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    padding: 5px 13px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .chip-action:hover { background: var(--accent); border-color: var(--accent); }
+  .chip-action:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* THEME TAGS */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .theme-card {
+    background: var(--paper-3);
+    border: 1px solid var(--line);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--clr, var(--accent));
+  }
+  .theme-card .ic {
+    font-family: 'Prompt', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--clr, var(--accent));
+    line-height: 1;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .theme-card .h {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .theme-card .c {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* QUOTES */
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .quote {
+    background: var(--paper-3);
+    border: 1px solid var(--line);
+    padding: 28px 28px 24px;
+    position: relative;
+  }
+  .quote::before {
+    content: '"';
+    position: absolute;
+    top: -8px; left: 18px;
+    font-family: 'Prompt', serif;
+    font-size: 88px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.85;
+  }
+  .quote .qt {
+    padding-top: 18px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .quote .qm {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .quote .qm strong { color: var(--accent); font-weight: 600; }
+
+  /* RAW RESPONSES TABLE */
+  .responses-detail {
+    display: grid;
+    gap: 14px;
+  }
+  .resp {
+    background: var(--paper-3);
+    border: 1px solid var(--line);
+    padding: 24px 28px;
+    position: relative;
+  }
+  .resp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed var(--line);
+    flex-wrap: wrap;
+  }
+  .resp-head .nm {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .resp-head .nm .id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-right: 10px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .resp-head .dept {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .resp-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    padding: 8px 0;
+    font-size: 14px;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(14,26,43,0.05);
+  }
+  .resp-row:last-child { border-bottom: none; }
+  .resp-row .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .resp-row .v {
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 14px;
+  }
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    background: var(--paper-2);
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--ink);
+    margin: 2px 4px 2px 0;
+    border: 1px solid var(--line);
+  }
+  .pill.has { background: rgba(43,110,114,0.12); color: var(--accent-3); border-color: rgba(43,110,114,0.3); font-weight: 600; }
+  .pill.no { background: rgba(232,85,58,0.12); color: var(--accent); border-color: rgba(232,85,58,0.3); font-weight: 600; }
+
+  /* TASK LISTS */
+  .task-list {
+    display: grid;
+    gap: 12px;
+  }
+  .task-item {
+    background: var(--paper-3);
+    border-left: 3px solid var(--accent-3);
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .task-item:hover {
+    transform: translateX(4px);
+    border-left-color: var(--accent);
+  }
+  .task-item .from {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 100px;
+    padding-top: 32px;
+    border-top: 2px solid var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  footer strong { color: var(--ink); font-weight: 600; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--paper-2); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    .wrap { padding: 0 20px 80px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3, .grid-3-2 { grid-template-columns: 1fr; }
+    .resp-row { grid-template-columns: 1fr; gap: 4px; }
+    .section-head { flex-direction: column; align-items: flex-start; }
+    .section-head p { text-align: left; }
+  }
+  @media (max-width: 520px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    .kpi-value { font-size: 42px; }
+    header.masthead { padding: 32px 0 24px; margin-bottom: 36px; }
+    .meta-strip { gap: 20px; }
+  }
+
+  /* DEVTOOL DISCOURAGEMENT */
+  .warning-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    color: var(--paper);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    font-family: 'Prompt', sans-serif;
+  }
+  .warning-overlay.show { display: flex; }
+  .warning-overlay h2 {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: var(--accent-2);
+  }
+  .warning-overlay p { color: rgba(245,241,232,0.7); font-size: 14px; }
+
+  img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+</style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="warning-overlay" id="warnOverlay">
+  <div>
+    <h2>เนื้อหาได้รับการป้องกัน</h2>
+    <p>กรุณาปิดเครื่องมือพัฒนาเพื่อกลับเข้าสู่หน้าเว็บ</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="masthead reveal">
+    <div class="kicker">Internal Survey Report · 2026</div>
+    <h1 class="title">
+      การประยุกต์ใช้<em>เทคโนโลยี AI</em><br>
+      เพื่อเพิ่มประสิทธิภาพการปฏิบัติงาน
+    </h1>
+    <p class="sub">
+      รายงานสรุปผลแบบสำรวจการใช้งานเครื่องมือปัญญาประดิษฐ์ของบุคลากร
+      สำนักหอสมุด พร้อมข้อเสนอแนะและความต้องการเครื่องมือเพิ่มเติม
+      เพื่อขับเคลื่อนการทำงานในยุคใหม่
+    </p>
+    <div class="meta-strip">
+      <div>RESPONDENTS<span>9 ท่าน</span></div>
+      <div>DEPARTMENTS<span>3 หน่วยงาน</span></div>
+      <div>SURVEY TYPE<span>Microsoft Forms</span></div>
+      <div>DATA STATUS<span>ประมวลผลครบถ้วน</span></div>
+    </div>
+  </header>
+
+  <!-- KPI ROW -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">01</span>ภาพรวมการใช้งาน</h2>
+      <p>ตัวเลขสำคัญที่สรุปสถานะการใช้ AI ของบุคลากรในปัจจุบัน</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi accent">
+        <div class="kpi-label">ใช้ AI แล้ว</div>
+        <div class="kpi-value">88<span class="unit">.9%</span></div>
+        <div class="kpi-foot">8 จาก 9 คน นำ AI มาช่วยงาน</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">เครื่องมือยอดนิยม</div>
+        <div class="kpi-value" style="font-size:36px;line-height:1.1">Gemini</div>
+        <div class="kpi-foot">8 ผู้ตอบ ใช้ Google Gemini เป็นเครื่องมือหลัก</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">ค่าใช้จ่ายเฉลี่ย/เดือน</div>
+        <div class="kpi-value">~720<span class="unit">฿</span></div>
+        <div class="kpi-foot">เฉพาะผู้ที่จ่ายเองด้วยเงินส่วนตัว</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">ความสามารถที่ต้องการสูงสุด</div>
+        <div class="kpi-value" style="font-size:32px;line-height:1.15">Data<br>Analysis</div>
+        <div class="kpi-foot">7 ใน 8 คน อยากให้เก่งด้านวิเคราะห์ข้อมูล</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DEMOGRAPHICS & USAGE -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">02</span>การกระจายตัวของผู้ตอบ</h2>
+      <p>ดูสัดส่วนผู้ตอบแบบสำรวจตามหน่วยงาน และสถานะการใช้ AI</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">สังกัดของผู้ตอบ</div>
+        <div class="card-desc">แบ่งตามงานที่สังกัดภายในสำนักหอสมุด</div>
+        <div class="chart-box"><canvas id="chDept"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">สถานะการใช้ AI ปัจจุบัน</div>
+        <div class="card-desc">ภาพรวมของบุคลากรที่นำ AI มาช่วยงาน vs ที่ยังไม่ได้เริ่ม</div>
+        <div class="chart-box"><canvas id="chUse"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: TOOLS -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">03</span>เครื่องมือ AI ที่นิยมใช้</h2>
+      <p>ผู้ตอบเลือกได้มากกว่า 1 รายการ จึงนับซ้ำได้ในกราฟ</p>
+    </div>
+    <div class="card">
+      <div class="card-title">การจัดอันดับเครื่องมือ AI</div>
+      <div class="card-desc">นับจำนวนผู้ใช้งานในแต่ละเครื่องมือ — Google Gemini และ ChatGPT เป็นที่นิยมสูงสุด</div>
+      <div class="chart-box tall"><canvas id="chTools"></canvas></div>
+    </div>
+  </section>
+
+  <!-- SECTION: USE CASES (mergable) -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">04</span>การใช้งานในภาระงานต่าง ๆ</h2>
+      <p>หมวดหมู่สามารถ <strong style="color:var(--accent)">รวม/แยกได้</strong> โดยคลิกที่แท็กด้านล่าง</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">งานที่นำ AI มาช่วย</div>
+      <div class="card-desc">ผมจัดหมวดหมู่จากคำตอบปลายเปิดของผู้ตอบ — คลิกแท็กเพื่อเลือกรวมเป็นหมวดเดียว แล้วกด "รวมหมวด"</div>
+      <div class="merge-bar" id="mergeBar">
+        <span class="lbl">รวมหมวด:</span>
+        <span class="chip" data-cat="docs"><span class="dot" style="background:#E8553A"></span>งานเอกสาร</span>
+        <span class="chip" data-cat="media"><span class="dot" style="background:#2B6E72"></span>สื่อ/วิดีโอ/Content</span>
+        <span class="chip" data-cat="analysis"><span class="dot" style="background:#F2A65A"></span>วิเคราะห์ข้อมูล/สรุป</span>
+        <span class="chip" data-cat="search"><span class="dot" style="background:#8B5E83"></span>ค้นหา/หาความรู้</span>
+        <span class="chip" data-cat="code"><span class="dot" style="background:#5A8A3A"></span>เขียนโค้ด/CSS</span>
+        <span class="chip" data-cat="personal"><span class="dot" style="background:#C9956A"></span>เรื่องส่วนตัว</span>
+        <span class="chip chip-action" id="mergeBtn" disabled>↳ รวม</span>
+        <span class="chip chip-action" id="resetBtn">↺ รีเซ็ต</span>
+      </div>
+      <div class="chart-box"><canvas id="chUseCase"></canvas></div>
+    </div>
+  </section>
+
+  <!-- SECTION: CAPABILITY + SPEND -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">05</span>ความต้องการและการลงทุนส่วนตัว</h2>
+      <p>ความสามารถที่อยากให้ AI ทำได้ดีที่สุด และงบประมาณที่จ่ายเอง</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">ความสามารถ AI ที่ต้องการ</div>
+        <div class="card-desc">หากเลือกได้ ผู้ตอบอยากให้ AI เด่นในด้านใด</div>
+        <div class="chart-box"><canvas id="chCap"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">ค่าใช้จ่ายส่วนตัวต่อเดือน</div>
+        <div class="card-desc">จัดกลุ่มตามช่วงราคา (รวมที่ไม่จ่าย/ใช้ฟรี/ไม่ระบุ)</div>
+        <div class="chart-box"><canvas id="chSpend"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: THEMES -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">06</span>ภาระงานที่ต้องการให้ AI ช่วย</h2>
+      <p>ประเด็นที่ผู้ตอบระบุว่ามีขั้นตอนซ้ำซ้อน ใช้เวลานาน</p>
+    </div>
+
+    <div class="theme-grid">
+      <div class="theme-card" style="--clr:#E8553A">
+        <div class="ic">01</div>
+        <div class="h">งานเอกสาร/รายงาน</div>
+        <div class="c">สรุปรายงานการประชุม จัดทำคู่มือ flow กระบวนการ ร่างเสนอโครงการ และจัดทำสถิติ</div>
+      </div>
+      <div class="theme-card" style="--clr:#2B6E72">
+        <div class="ic">02</div>
+        <div class="h">สื่อและคอนเทนต์</div>
+        <div class="c">จัดทำภาพ/วิดีโอสั้น Infographic SEO และ CSS UX/UI สำหรับการนำเสนอออนไลน์</div>
+      </div>
+      <div class="theme-card" style="--clr:#F2A65A">
+        <div class="ic">03</div>
+        <div class="h">วิเคราะห์ข้อมูล</div>
+        <div class="c">ประมวลผลข้อมูลระบบอาคารสถานที่ วิเคราะห์ข้อมูลและนำเสนอผลในรูปแบบที่เข้าใจง่าย</div>
+      </div>
+      <div class="theme-card" style="--clr:#8B5E83">
+        <div class="ic">04</div>
+        <div class="h">ระบบจัดเก็บ/อัตโนมัติ</div>
+        <div class="c">สร้างระบบจัดเก็บข้อมูลสารสนเทศภายในงาน วางแผนการทำงานระบบอาคาร และ Coding</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: QUOTES -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">07</span>เสียงจากผู้ตอบ</h2>
+      <p>คำตอบและข้อเสนอแนะที่น่าสนใจในรูปแบบคำพูดจากเจ้าของ</p>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p class="qt">ควรมีการอบรมการใช้งาน AI ให้บุคลากรอย่างต่อเนื่อง พร้อมกำหนดแนวทางการใช้งานที่เหมาะสมและปลอดภัย เพื่อให้สามารถนำ AI มาช่วยเพิ่มประสิทธิภาพการทำงาน ลดภาระงานซ้ำซ้อน และพัฒนาคุณภาพงานของหน่วยงานได้อย่างเต็มประสิทธิภาพ</p>
+        <div class="qm"><span><strong>วรรัตน์ อุ่นเมืองอินทร์</strong></span><span>งานนโยบายและแผน</span></div>
+      </div>
+      <div class="quote">
+        <p class="qt">อยากให้จัดซื้อ Claude AI หรืออื่นใดที่เหมาะสมกับงานแต่ละท่านเพื่อ LEAN ขั้นตอน รวมถึงการจัดทำภาพเพื่อนำเสนอผ่านคอนเทนต์ การเขียน coding และจัดทำ SEO to HTML file</p>
+        <div class="qm"><span><strong>เธียรวิชญ์ พิชญนันท์กุล</strong></span><span>งานบริหารทั่วไป</span></div>
+      </div>
+      <div class="quote">
+        <p class="qt">ต้องใช้ระยะเวลาในการศึกษา เพื่อจะได้ทราบว่าภาระงานที่รับผิดชอบเหมาะสมกับ AI ประเภทใด — ตอนนี้มุ่งเน้นเรื่องการช่วยจัดทำข้อมูล วิเคราะห์ข้อมูลและการนำเสนอข้อมูล</p>
+        <div class="qm"><span><strong>ผู้ตอบหมายเลข 4</strong></span><span>งานการเงินการคลังและพัสดุ</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DETAIL TABLE -->
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">08</span>รายละเอียดผู้ตอบรายบุคคล</h2>
+      <p>ข้อมูลครบทั้งหมด 9 รายการ เลื่อนดูได้</p>
+    </div>
+    <div class="responses-detail" id="respList"></div>
+  </section>
+
+  <footer>
+    <div><strong>รายงานวิเคราะห์แบบสำรวจ AI</strong> · สำนักหอสมุด</div>
+    <div>เอกสารสำหรับใช้ภายในเท่านั้น · พฤษภาคม 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// ============= ANTI INSPECT =============
+document.addEventListener('keydown', function(e) {
+  // F12
+  if (e.keyCode === 123) { e.preventDefault(); flashWarn(); return false; }
+  // Ctrl+Shift+I / J / C
+  if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+    e.preventDefault(); flashWarn(); return false;
+  }
+  // Ctrl+U (view source)
+  if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); flashWarn(); return false; }
+  // Ctrl+S (save)
+  if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
+});
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
+function flashWarn() {
+  const w = document.getElementById('warnOverlay');
+  w.classList.add('show');
+  setTimeout(() => w.classList.remove('show'), 1600);
+}
+// DevTools size check (simple)
+let _devOpen = false;
+setInterval(function() {
+  const threshold = 160;
+  if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+    if (!_devOpen) { _devOpen = true; flashWarn(); }
+  } else { _devOpen = false; }
+}, 1500);
+
+// ============= REVEAL ON SCROLL =============
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ============= DATA =============
+const SURVEY = [
+  { id:1, name:"อัจฉรีย์ อินเทพ", dept:"งานบริหารทั่วไป", useAI:true,
+    tools:["Google Gemini","ChatGPT","NotebookLM"], forWhat:"ด้านงานเอกสาร",
+    spend:"-", wanted:"-", cap:"Data Analysis",
+    task:"-", unknown:"-", sugg:"-" },
+  { id:2, name:"เธียรวิชญ์ พิชญนันท์กุล", dept:"งานบริหารทั่วไป", useAI:true,
+    tools:["ChatGPT","Google Gemini","Claude","Grok","NotebookLM"],
+    forWhat:"การจัดทำสื่อ/วิดีโอสำหรับ Content, การเขียน Code Vibe, ช่วยพัฒนา CSS UX/UI ฐานข้อมูลหน่วยสื่อสารองค์กร และค้นหาความรู้เพื่อจัดทำคอนเทนต์ออนไลน์",
+    spend:"21 USD ++", wanted:"จัดซื้อ Claude AI หรืออื่นใดที่เหมาะกับงานเพื่อ LEAN ขั้นตอน",
+    cap:"Coding/Automation",
+    task:"จัดทำภาพเพื่อคอนเทนต์, เขียน coding, จัดทำวิดีโอสั้น, SEO to HTML",
+    unknown:"ทุกกระบวนการทำงาน", sugg:"-" },
+  { id:3, name:"ฐิติรัตน์ ตันติวัฒน์", dept:"งานบริหารทั่วไป", useAI:false,
+    tools:[], forWhat:"-", spend:"-", wanted:"-", cap:"-",
+    task:"รายงานการประชุมคณะกรรมการอำนวยการประจำสำนักหอสมุด",
+    unknown:"-", sugg:"-" },
+  { id:4, name:"(ไม่ระบุชื่อ)", dept:"งานการเงินการคลังและพัสดุ", useAI:true,
+    tools:["ChatGPT","Google Gemini","Microsoft Copilot","NotebookLM"],
+    forWhat:"งานที่รับผิดชอบ และเรื่องส่วนตัว",
+    spend:"ใช้ฟรีของมหาวิทยาลัยเชียงใหม่",
+    wanted:"จัดทำข้อมูล เช่น Data ฐานข้อมูลต่าง ๆ", cap:"Data Analysis",
+    task:"มุ่งเน้นเรื่องช่วยจัดทำ วิเคราะห์ และนำเสนอข้อมูล",
+    unknown:"-",
+    sugg:"ต้องใช้ระยะเวลาในการศึกษา เพื่อทราบว่าภาระงานที่รับผิดชอบเหมาะกับ AI ประเภทใด" },
+  { id:5, name:"ธนพศ อินทรอมร", dept:"งานการเงินการคลังและพัสดุ", useAI:true,
+    tools:["Google Gemini","NotebookLM","Manus.AI","Microsoft Copilot"],
+    forWhat:"ไฟล์นำเสนอ, สรุปเนื้อหา, แนะนำกระบวนการ/วิธีการทำงาน",
+    spend:"750", wanted:"-", cap:"Data Analysis",
+    task:"-", unknown:"-", sugg:"-" },
+  { id:6, name:"ขนิษฐา ไชยพันธุ์", dept:"งานการเงินการคลังและพัสดุ", useAI:true,
+    tools:["ChatGPT","Google Gemini","Claude","NotebookLM"],
+    forWhat:"ร่างหนังสือ ทำ Infographic ค้นหาข้อมูลด้านจัดซื้อจัดจ้าง",
+    spend:"1,400", wanted:"Claude", cap:"Data Analysis",
+    task:"-", unknown:"-", sugg:"-" },
+  { id:7, name:"จิราภรณ์ หาบุญ", dept:"งานบริหารทั่วไป", useAI:true,
+    tools:["ChatGPT","Google Gemini"],
+    forWhat:"รายละเอียดข้อมูลประกอบการเสนอเรื่อง",
+    spend:"-", wanted:"-", cap:"Data Analysis",
+    task:"การจัดเก็บข้อมูล และการประมวลผลระบบอาคารสถานที่",
+    unknown:"การวางแผนการทำงานระบบอาคารสถานที่", sugg:"-" },
+  { id:8, name:"รติยา วีระคำ", dept:"งานนโยบายและแผน", useAI:true,
+    tools:["ChatGPT","Google Gemini"],
+    forWhat:"สรุปเอกสารให้เข้าใจง่าย, ร่างเสนอโครงการ, วิเคราะห์ผลข้อมูล, ออกแบบไฟล์นำเสนอ",
+    spend:"-", wanted:"-", cap:"Data Analysis",
+    task:"จัดทำคู่มือหรือแผนผังขั้นตอน flow กระบวนการทำงานต่างๆ",
+    unknown:"การสร้างระบบจัดเก็บข้อมูลสารสนเทศต่างๆภายในงาน", sugg:"-" },
+  { id:9, name:"วรรัตน์ อุ่นเมืองอินทร์", dept:"งานนโยบายและแผน", useAI:true,
+    tools:["ChatGPT","Google Gemini","NotebookLM"],
+    forWhat:"จัดทำเอกสารเพื่อนำเสนอผู้บริหาร",
+    spend:"ไม่มี", wanted:"-", cap:"Data Analysis",
+    task:"งานเอกสารและประมวลผลข้อมูลที่ซ้ำซ้อน เช่น สรุปรายงาน จัดทำสถิติ เรียบเรียงข้อมูล",
+    unknown:"สรุปรายงานการประชุม",
+    sugg:"ควรมีการอบรมการใช้งาน AI ให้บุคลากรอย่างต่อเนื่อง พร้อมกำหนดแนวทางการใช้งานที่เหมาะสมและปลอดภัย" }
+];
+
+// ============= COLORS =============
+const PAL = ['#E8553A','#2B6E72','#F2A65A','#8B5E83','#5A8A3A','#C9956A','#3E5F8A','#A03C5E'];
+const INK = '#0E1A2B';
+const MUTED = '#6B7A8E';
+
+// Global Chart defaults
+Chart.defaults.font.family = "'IBM Plex Sans Thai', sans-serif";
+Chart.defaults.color = INK;
+Chart.defaults.font.size = 13;
+Chart.register(ChartDataLabels);
+Chart.defaults.plugins.datalabels.display = false;
+
+// ============= 1. DEPARTMENT =============
+const deptCount = {};
+SURVEY.forEach(r => deptCount[r.dept] = (deptCount[r.dept]||0)+1);
+new Chart(document.getElementById('chDept'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(deptCount),
+    datasets:[{
+      data:Object.values(deptCount),
+      backgroundColor:[PAL[0],PAL[1],PAL[2]],
+      borderColor:'#FFFCF5',
+      borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'62%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:14, boxWidth:12, font:{size:12}}},
+      datalabels:{
+        display:true,
+        color:'#FFFCF5',
+        font:{family:"'Prompt', sans-serif", weight:'700', size:16},
+        formatter:(v,ctx)=>{
+          const tot = ctx.dataset.data.reduce((a,b)=>a+b,0);
+          return v + '\n' + Math.round(v/tot*100) + '%';
+        },
+        textAlign:'center'
+      }
+    }
+  }
+});
+
+// ============= 2. USE AI =============
+const useCount = { 'มีการใช้งาน':0, 'ยังไม่มีการใช้งาน':0 };
+SURVEY.forEach(r => useCount[r.useAI?'มีการใช้งาน':'ยังไม่มีการใช้งาน']++);
+new Chart(document.getElementById('chUse'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(useCount),
+    datasets:[{
+      data:Object.values(useCount),
+      backgroundColor:[PAL[1],PAL[0]],
+      borderColor:'#FFFCF5',
+      borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'62%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:14, boxWidth:12, font:{size:12}}},
+      datalabels:{
+        display:true,
+        color:'#FFFCF5',
+        font:{family:"'Prompt', sans-serif", weight:'700', size:18},
+        formatter:(v,ctx)=>{
+          const tot = ctx.dataset.data.reduce((a,b)=>a+b,0);
+          return v + ' คน\n' + Math.round(v/tot*100) + '%';
+        },
+        textAlign:'center'
+      }
+    }
+  }
+});
+
+// ============= 3. TOOLS =============
+const toolCount = {};
+SURVEY.forEach(r => r.tools.forEach(t => toolCount[t]=(toolCount[t]||0)+1));
+const sortedTools = Object.entries(toolCount).sort((a,b)=>b[1]-a[1]);
+new Chart(document.getElementById('chTools'), {
+  type:'bar',
+  data:{
+    labels:sortedTools.map(x=>x[0]),
+    datasets:[{
+      label:'จำนวนผู้ใช้',
+      data:sortedTools.map(x=>x[1]),
+      backgroundColor:sortedTools.map((_,i)=>PAL[i%PAL.length]),
+      borderRadius:6,
+      borderSkipped:false,
+      maxBarThickness:42
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      datalabels:{
+        display:true, anchor:'end', align:'end', offset:8,
+        color:INK, font:{weight:'700',size:14, family:"'Prompt', sans-serif"},
+        formatter:v=>v+' คน'
+      }
+    },
+    scales:{
+      x:{
+        beginAtZero:true,
+        max:Math.max(...sortedTools.map(x=>x[1]))+2,
+        grid:{color:'rgba(14,26,43,0.06)'},
+        ticks:{stepSize:1, color:MUTED}
+      },
+      y:{grid:{display:false}, ticks:{color:INK, font:{weight:'600',size:13}}}
+    }
+  }
+});
+
+// ============= 4. USE CASE (mergable) =============
+let categories = [
+  {key:'docs', label:'งานเอกสาร', count:5, color:'#E8553A'},
+  {key:'media', label:'สื่อ/วิดีโอ/Content', count:2, color:'#2B6E72'},
+  {key:'analysis', label:'วิเคราะห์ข้อมูล/สรุป', count:4, color:'#F2A65A'},
+  {key:'search', label:'ค้นหา/หาความรู้', count:2, color:'#8B5E83'},
+  {key:'code', label:'เขียนโค้ด/CSS', count:1, color:'#5A8A3A'},
+  {key:'personal', label:'เรื่องส่วนตัว', count:1, color:'#C9956A'}
+];
+const ORIG_CATS = JSON.parse(JSON.stringify(categories));
+
+let useChart;
+function renderUseChart() {
+  if (useChart) useChart.destroy();
+  useChart = new Chart(document.getElementById('chUseCase'), {
+    type:'bar',
+    data:{
+      labels:categories.map(c=>c.label),
+      datasets:[{
+        label:'จำนวนการใช้งาน',
+        data:categories.map(c=>c.count),
+        backgroundColor:categories.map(c=>c.color),
+        borderRadius:6,
+        borderSkipped:false,
+        maxBarThickness:60
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:{duration:600},
+      plugins:{
+        legend:{display:false},
+        datalabels:{
+          display:true, anchor:'end', align:'top', offset:4,
+          color:INK, font:{weight:'700',size:14, family:"'Prompt', sans-serif"}
+        }
+      },
+      scales:{
+        y:{
+          beginAtZero:true,
+          grid:{color:'rgba(14,26,43,0.06)'},
+          ticks:{stepSize:1, color:MUTED}
+        },
+        x:{grid:{display:false}, ticks:{color:INK, font:{weight:'600',size:12}}}
+      }
+    }
+  });
+}
+renderUseChart();
+
+const selected = new Set();
+document.querySelectorAll('#mergeBar .chip[data-cat]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const k = chip.dataset.cat;
+    if (selected.has(k)) { selected.delete(k); chip.classList.remove('active'); }
+    else { selected.add(k); chip.classList.add('active'); }
+    document.getElementById('mergeBtn').disabled = selected.size < 2;
+  });
+});
+document.getElementById('mergeBtn').addEventListener('click', () => {
+  if (selected.size < 2) return;
+  const merging = categories.filter(c => selected.has(c.key));
+  const remain = categories.filter(c => !selected.has(c.key));
+  const newCat = {
+    key: 'merged_' + Date.now(),
+    label: merging.map(c=>c.label).join(' + '),
+    count: merging.reduce((s,c)=>s+c.count,0),
+    color: merging[0].color
+  };
+  categories = [...remain, newCat];
+  selected.clear();
+  document.querySelectorAll('#mergeBar .chip[data-cat]').forEach(c=>c.classList.remove('active'));
+  document.getElementById('mergeBtn').disabled = true;
+  renderUseChart();
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  categories = JSON.parse(JSON.stringify(ORIG_CATS));
+  selected.clear();
+  document.querySelectorAll('#mergeBar .chip[data-cat]').forEach(c=>c.classList.remove('active'));
+  document.getElementById('mergeBtn').disabled = true;
+  renderUseChart();
+});
+
+// ============= 5. CAPABILITY =============
+const capCount = {'วิเคราะห์ข้อมูล/Data Analysis':7, 'Coding/Automation':1, 'ไม่ระบุ':1};
+new Chart(document.getElementById('chCap'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(capCount),
+    datasets:[{
+      data:Object.values(capCount),
+      backgroundColor:[PAL[2],PAL[1],PAL[5]],
+      borderColor:'#FFFCF5',
+      borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'58%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:12, boxWidth:12, font:{size:11.5}}},
+      datalabels:{
+        display:(c)=>c.dataset.data[c.dataIndex]>0,
+        color:'#FFFCF5',
+        font:{family:"'Prompt', sans-serif", weight:'700', size:15},
+        formatter:v=>v
+      }
+    }
+  }
+});
+
+// ============= 6. SPEND =============
+// Categorize: ฟรี/ไม่จ่าย (-, ไม่มี, ใช้ฟรี, NaN), <1000, ≥1000, USD-based
+const spendBucket = {'ใช้ฟรี/ไม่ระบุ':0, 'ต่ำกว่า 1,000 บาท':0, '1,000 บาทขึ้นไป':0, 'ชำระเป็น USD':0};
+SURVEY.forEach(r => {
+  const s = (r.spend||'').toString().trim();
+  if (!s || s==='-' || s==='ไม่มี' || s.includes('ฟรี')) spendBucket['ใช้ฟรี/ไม่ระบุ']++;
+  else if (s.toUpperCase().includes('USD') || s.includes('Dollar')) spendBucket['ชำระเป็น USD']++;
+  else {
+    const num = parseFloat(s.replace(/,/g,''));
+    if (!isNaN(num)) {
+      if (num >= 1000) spendBucket['1,000 บาทขึ้นไป']++;
+      else spendBucket['ต่ำกว่า 1,000 บาท']++;
+    } else spendBucket['ใช้ฟรี/ไม่ระบุ']++;
+  }
+});
+new Chart(document.getElementById('chSpend'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(spendBucket),
+    datasets:[{
+      data:Object.values(spendBucket),
+      backgroundColor:[PAL[5],PAL[2],PAL[0],PAL[1]],
+      borderColor:'#FFFCF5',
+      borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'58%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:10, boxWidth:12, font:{size:11.5}}},
+      datalabels:{
+        display:(c)=>c.dataset.data[c.dataIndex]>0,
+        color:'#FFFCF5',
+        font:{family:"'Prompt', sans-serif", weight:'700', size:14},
+        formatter:v=>v
+      }
+    }
+  }
+});
+
+// ============= RESPONSES TABLE =============
+const list = document.getElementById('respList');
+SURVEY.forEach(r => {
+  const toolsHtml = r.tools.length
+    ? r.tools.map(t => `<span class="pill">${t}</span>`).join('')
+    : '<span class="pill">—</span>';
+  const usePill = r.useAI
+    ? '<span class="pill has">✓ ใช้งาน</span>'
+    : '<span class="pill no">✗ ยังไม่ใช้</span>';
+  list.insertAdjacentHTML('beforeend', `
+    <div class="resp">
+      <div class="resp-head">
+        <div class="nm"><span class="id">#${String(r.id).padStart(2,'0')}</span>${r.name}</div>
+        <div class="dept">${r.dept} · ${usePill}</div>
+      </div>
+      <div class="resp-row"><div class="k">เครื่องมือที่ใช้</div><div class="v">${toolsHtml}</div></div>
+      <div class="resp-row"><div class="k">ใช้ทำอะไร</div><div class="v">${r.forWhat||'—'}</div></div>
+      <div class="resp-row"><div class="k">ค่าใช้จ่าย/เดือน</div><div class="v">${r.spend||'—'}</div></div>
+      <div class="resp-row"><div class="k">เครื่องมือที่ต้องการ</div><div class="v">${r.wanted||'—'}</div></div>
+      <div class="resp-row"><div class="k">ความสามารถที่อยากได้</div><div class="v">${r.cap||'—'}</div></div>
+      <div class="resp-row"><div class="k">งานที่อยากให้ AI ช่วย</div><div class="v">${r.task||'—'}</div></div>
+      <div class="resp-row"><div class="k">งานที่ยังไม่รู้ใช้อะไร</div><div class="v">${r.unknown||'—'}</div></div>
+      <div class="resp-row"><div class="k">ข้อเสนอแนะ</div><div class="v">${r.sugg||'—'}</div></div>
+    </div>
+  `);
+});
+</script>
+
+</body>
+</html>
