@@ -11,50 +11,53 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
   :root {
-    --ink: #0E1A2B;
-    --ink-2: #14253D;
-    --paper: #F5F1E8;
-    --paper-2: #EBE4D2;
-    --paper-3: #FFFCF5;
-    --accent: #E8553A;
-    --accent-2: #F2A65A;
-    --accent-3: #2B6E72;
-    --accent-4: #8B5E83;
-    --muted: #6B7A8E;
-    --line: rgba(14, 26, 43, 0.12);
-    --line-strong: rgba(14, 26, 43, 0.25);
-    --shadow: 0 1px 0 rgba(14,26,43,0.04), 0 10px 30px -10px rgba(14,26,43,0.15);
+    /* Modern Dashboard Color Palette */
+    --bg-body: #F4F7FB;
+    --bg-card: #FFFFFF;
+    --text-main: #1E293B; /* Slate 800 */
+    --text-muted: #64748B; /* Slate 500 */
+    --border: #E2E8F0;
+    --border-light: #F1F5F9;
+    
+    /* Accents */
+    --primary: #4F46E5; /* Indigo */
+    --primary-light: #EEF2FF;
+    --accent-blue: #3B82F6;
+    --accent-emerald: #10B981;
+    --accent-orange: #F59E0B;
+    --accent-rose: #F43F5E;
+    --accent-purple: #8B5CF6;
+
+    /* Shadows & Radii */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--bg-body);
+    color: var(--text-main);
     font-family: 'IBM Plex Sans Thai', sans-serif;
     font-weight: 400;
-    line-height: 1.55;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    user-select: none;
-    -webkit-user-select: none;
   }
 
-  body {
-    background-image:
-      radial-gradient(circle at 15% 8%, rgba(232, 85, 58, 0.06), transparent 35%),
-      radial-gradient(circle at 85% 90%, rgba(43, 110, 114, 0.06), transparent 40%);
-    background-attachment: fixed;
-    min-height: 100vh;
-  }
-
-  /* Grainy texture overlay */
+  /* Soft Background Gradient */
   body::before {
     content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    position: fixed;
+    top: 0; left: 0; right: 0; height: 100vh;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
     pointer-events: none;
-    z-index: 100;
-    mix-blend-mode: multiply;
+    z-index: -1;
   }
 
   .wrap {
@@ -63,69 +66,100 @@
     padding: 0 32px 120px;
   }
 
+  /* TOP NAVIGATION (Back Button) */
+  .top-nav {
+    padding: 32px 0 0 0;
+    display: flex;
+    align-items: center;
+  }
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: var(--bg-card);
+    color: var(--text-main);
+    text-decoration: none;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+  }
+  .btn-back:hover {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .btn-back svg {
+    width: 18px;
+    height: 18px;
+  }
+
   /* HEADER */
   header.masthead {
-    padding: 48px 0 32px;
-    border-bottom: 2px solid var(--ink);
-    margin-bottom: 56px;
+    padding: 40px 0 40px;
+    margin-bottom: 40px;
     position: relative;
+    border-bottom: 1px solid var(--border);
   }
   .kicker {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    font-size: 12px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--primary);
     margin-bottom: 24px;
     font-weight: 600;
-  }
-  .kicker::before {
-    content: '';
-    width: 28px; height: 1px;
-    background: var(--accent);
+    background: var(--primary-light);
+    padding: 6px 16px;
+    border-radius: 20px;
   }
   h1.title {
     font-family: 'Prompt', sans-serif;
     font-weight: 800;
-    font-size: clamp(38px, 5.5vw, 68px);
-    line-height: 1.02;
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1.1;
     letter-spacing: -0.02em;
-    color: var(--ink);
+    color: var(--text-main);
     max-width: 980px;
   }
   h1.title em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--accent);
+    font-style: normal;
+    background: linear-gradient(120deg, var(--primary), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .sub {
-    margin-top: 22px;
-    font-size: 17px;
-    color: var(--muted);
-    max-width: 720px;
-    line-height: 1.65;
+    margin-top: 24px;
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 760px;
+    line-height: 1.7;
   }
   .meta-strip {
     display: flex;
     flex-wrap: wrap;
-    gap: 32px 40px;
-    margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid var(--line);
+    gap: 24px 48px;
+    margin-top: 48px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    color: var(--muted);
+    color: var(--text-muted);
     letter-spacing: 0.04em;
   }
   .meta-strip div span {
     display: block;
-    color: var(--ink);
-    font-size: 14px;
+    color: var(--text-main);
+    font-size: 16px;
     font-weight: 600;
-    margin-top: 4px;
+    margin-top: 6px;
     font-family: 'IBM Plex Sans Thai', sans-serif;
     letter-spacing: 0;
   }
@@ -138,33 +172,31 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 16px;
   }
   .section-head h2 {
     font-family: 'Prompt', sans-serif;
     font-weight: 700;
-    font-size: clamp(26px, 3vw, 34px);
+    font-size: clamp(24px, 2.5vw, 30px);
     letter-spacing: -0.01em;
-    color: var(--ink);
+    color: var(--text-main);
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 16px;
   }
   .section-head h2 .num {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--accent);
+    font-size: 14px;
+    color: var(--primary);
     font-weight: 600;
-    background: rgba(232, 85, 58, 0.08);
-    padding: 4px 10px;
-    border-radius: 4px;
-    letter-spacing: 0.08em;
+    background: var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 8px;
+    letter-spacing: 0.05em;
   }
   .section-head p {
-    font-size: 14px;
-    color: var(--muted);
-    max-width: 380px;
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 400px;
     text-align: right;
   }
 
@@ -172,369 +204,379 @@
   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: 20px;
+    margin-bottom: 24px;
   }
   .kpi {
-    background: var(--paper-3);
-    border: 1px solid var(--line);
-    padding: 24px 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
     position: relative;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .kpi:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
   }
   .kpi-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
     font-weight: 600;
   }
   .kpi-value {
     font-family: 'Prompt', sans-serif;
-    font-size: 52px;
+    font-size: 48px;
     font-weight: 800;
     line-height: 1;
-    color: var(--ink);
-    letter-spacing: -0.03em;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
   }
   .kpi-value .unit {
     font-size: 18px;
-    font-weight: 500;
-    color: var(--muted);
-    margin-left: 4px;
-    letter-spacing: 0;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-left: 6px;
   }
   .kpi-foot {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 10px;
-    line-height: 1.4;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    line-height: 1.5;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-light);
   }
-  .kpi.accent { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .kpi.accent .kpi-label { color: var(--accent-2); }
-  .kpi.accent .kpi-value { color: var(--paper); }
-  .kpi.accent .kpi-value .unit { color: var(--accent-2); }
-  .kpi.accent .kpi-foot { color: rgba(245, 241, 232, 0.65); }
+  
+  /* Highlight KPI */
+  .kpi.accent { 
+    background: linear-gradient(135deg, var(--primary), #6366F1); 
+    color: #FFFFFF; 
+    border: none; 
+  }
+  .kpi.accent .kpi-label { color: rgba(255,255,255,0.8); }
+  .kpi.accent .kpi-value { color: #FFFFFF; }
+  .kpi.accent .kpi-value .unit { color: rgba(255,255,255,0.8); }
+  .kpi.accent .kpi-foot { color: rgba(255,255,255,0.8); border-top-color: rgba(255,255,255,0.2); }
 
   /* CHART CARDS */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-  .grid-3-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
 
   .card {
-    background: var(--paper-3);
-    border: 1px solid var(--line);
-    padding: 28px;
-    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
   }
   .card-title {
     font-family: 'Prompt', sans-serif;
     font-weight: 600;
-    font-size: 19px;
-    color: var(--ink);
-    margin-bottom: 4px;
-    letter-spacing: -0.005em;
+    font-size: 20px;
+    color: var(--text-main);
+    margin-bottom: 8px;
   }
   .card-desc {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 24px;
-    line-height: 1.5;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
   }
   .chart-box {
     position: relative;
     height: 320px;
   }
-  .chart-box.tall { height: 380px; }
-  .chart-box.short { height: 240px; }
+  .chart-box.tall { height: 400px; }
 
   /* CATEGORY MERGE CONTROLS */
   .merge-bar {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: var(--paper-2);
-    border: 1px dashed var(--line-strong);
-    padding: 10px 14px;
-    margin-bottom: 16px;
-    font-size: 12px;
-    color: var(--muted);
+    gap: 12px;
+    background: var(--bg-body);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
   }
   .merge-bar .lbl {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink);
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    color: var(--text-main);
     font-weight: 600;
   }
   .chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 11px;
-    border-radius: 100px;
-    border: 1px solid var(--line-strong);
-    background: var(--paper-3);
-    font-size: 12px;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    font-size: 13px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
     user-select: none;
-    color: var(--ink);
+    color: var(--text-main);
+    font-family: 'Prompt', sans-serif;
     font-weight: 500;
   }
-  .chip:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .chip.active { background: var(--accent); color: var(--paper-3); border-color: var(--accent); }
+  .chip:hover { 
+    border-color: var(--primary); 
+    box-shadow: var(--shadow-sm);
+  }
+  .chip.active { 
+    background: var(--primary); 
+    color: #FFFFFF; 
+    border-color: var(--primary); 
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+  }
   .chip .dot {
     width: 8px; height: 8px; border-radius: 50%;
-    background: var(--muted);
+    background: var(--text-muted);
   }
-  .chip.active .dot { background: var(--paper-3); }
+  .chip.active .dot { background: #FFFFFF; }
+  
   .chip-action {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-    padding: 5px 13px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    font-weight: 600;
+    background: var(--text-main);
+    color: #FFFFFF;
+    border-color: var(--text-main);
   }
-  .chip-action:hover { background: var(--accent); border-color: var(--accent); }
-  .chip-action:disabled { opacity: 0.35; cursor: not-allowed; }
+  .chip-action:hover { 
+    background: #000; 
+    border-color: #000; 
+  }
+  .chip-action:disabled { 
+    opacity: 0.4; 
+    cursor: not-allowed; 
+    box-shadow: none;
+  }
+  .chip-action#resetBtn {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border);
+  }
+  .chip-action#resetBtn:hover {
+    background: var(--border-light);
+  }
 
   /* THEME TAGS */
   .theme-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 14px;
-    margin-top: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
   }
   .theme-card {
-    background: var(--paper-3);
-    border: 1px solid var(--line);
-    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px;
     position: relative;
-    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s;
   }
-  .theme-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: var(--clr, var(--accent));
+  .theme-card:hover {
+    transform: translateY(-4px);
   }
   .theme-card .ic {
-    font-family: 'Prompt', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--clr, var(--accent));
-    line-height: 1;
-    margin-bottom: 12px;
-    letter-spacing: -0.02em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: var(--bg-body);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--clr, var(--primary));
+    margin-bottom: 20px;
   }
   .theme-card .h {
     font-family: 'Prompt', sans-serif;
     font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: var(--ink);
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--text-main);
   }
   .theme-card .c {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.55;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
   }
 
   /* QUOTES */
   .quotes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
+    gap: 24px;
   }
   .quote {
-    background: var(--paper-3);
-    border: 1px solid var(--line);
-    padding: 28px 28px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
     position: relative;
+    box-shadow: var(--shadow-md);
   }
   .quote::before {
     content: '"';
     position: absolute;
-    top: -8px; left: 18px;
+    top: 10px; left: 24px;
     font-family: 'Prompt', serif;
-    font-size: 88px;
+    font-size: 80px;
     font-weight: 800;
-    color: var(--accent);
+    color: var(--primary-light);
     line-height: 1;
-    opacity: 0.85;
+    z-index: 0;
   }
   .quote .qt {
-    padding-top: 18px;
+    position: relative;
+    z-index: 1;
     font-size: 15px;
     line-height: 1.7;
-    color: var(--ink);
-    font-weight: 500;
+    color: var(--text-main);
+    font-weight: 400;
+    font-style: italic;
   }
   .quote .qm {
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    color: var(--muted);
+    position: relative;
+    z-index: 1;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+    color: var(--text-muted);
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
   }
-  .quote .qm strong { color: var(--accent); font-weight: 600; }
+  .quote .qm strong { 
+    color: var(--text-main); 
+    font-family: 'Prompt', sans-serif; 
+    font-weight: 600; 
+    font-size: 15px;
+  }
 
   /* RAW RESPONSES TABLE */
   .responses-detail {
     display: grid;
-    gap: 14px;
+    gap: 16px;
   }
   .resp {
-    background: var(--paper-3);
-    border: 1px solid var(--line);
-    padding: 24px 28px;
-    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
   }
   .resp-head {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     gap: 20px;
-    padding-bottom: 14px;
-    margin-bottom: 16px;
-    border-bottom: 1px dashed var(--line);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
     flex-wrap: wrap;
   }
   .resp-head .nm {
     font-family: 'Prompt', sans-serif;
     font-weight: 600;
-    font-size: 17px;
-    color: var(--ink);
+    font-size: 18px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .resp-head .nm .id {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    background: var(--ink);
-    color: var(--paper);
-    padding: 3px 8px;
-    border-radius: 3px;
-    margin-right: 10px;
-    letter-spacing: 0.05em;
+    font-size: 12px;
+    background: var(--bg-body);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 6px;
     font-weight: 600;
   }
   .resp-head .dept {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .resp-row {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 220px 1fr;
     gap: 16px;
-    padding: 8px 0;
-    font-size: 14px;
+    padding: 12px 0;
     align-items: baseline;
-    border-bottom: 1px solid rgba(14,26,43,0.05);
+    border-bottom: 1px dashed var(--border-light);
   }
-  .resp-row:last-child { border-bottom: none; }
+  .resp-row:last-child { border-bottom: none; padding-bottom: 0; }
   .resp-row .k {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 600;
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
   }
   .resp-row .v {
-    color: var(--ink);
+    color: var(--text-main);
     line-height: 1.6;
-    font-size: 14px;
+    font-size: 15px;
   }
   .pill {
     display: inline-block;
-    padding: 2px 10px;
-    background: var(--paper-2);
-    border-radius: 100px;
-    font-size: 12px;
-    color: var(--ink);
-    margin: 2px 4px 2px 0;
-    border: 1px solid var(--line);
+    padding: 4px 12px;
+    background: var(--bg-body);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-main);
+    margin: 4px 6px 4px 0;
+    border: 1px solid var(--border);
   }
-  .pill.has { background: rgba(43,110,114,0.12); color: var(--accent-3); border-color: rgba(43,110,114,0.3); font-weight: 600; }
-  .pill.no { background: rgba(232,85,58,0.12); color: var(--accent); border-color: rgba(232,85,58,0.3); font-weight: 600; }
-
-  /* TASK LISTS */
-  .task-list {
-    display: grid;
-    gap: 12px;
+  .pill.has { 
+    background: #ECFDF5; 
+    color: #059669; 
+    border-color: #A7F3D0; 
+    font-weight: 600; 
   }
-  .task-item {
-    background: var(--paper-3);
-    border-left: 3px solid var(--accent-3);
-    padding: 16px 20px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--ink);
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .task-item:hover {
-    transform: translateX(4px);
-    border-left-color: var(--accent);
-  }
-  .task-item .from {
-    display: block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-    font-weight: 600;
+  .pill.no { 
+    background: #FEF2F2; 
+    color: #DC2626; 
+    border-color: #FECACA; 
+    font-weight: 600; 
   }
 
   /* FOOTER */
   footer {
-    margin-top: 100px;
-    padding-top: 32px;
-    border-top: 2px solid var(--ink);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 16px;
   }
-  footer strong { color: var(--ink); font-weight: 600; }
+  footer strong { color: var(--text-main); font-weight: 600; }
 
   /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: var(--paper-2); }
-  ::-webkit-scrollbar-thumb { background: var(--ink); }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-body); }
+  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
   /* ANIMATIONS */
   .reveal {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.in {
     opacity: 1;
@@ -543,27 +585,27 @@
 
   /* RESPONSIVE */
   @media (max-width: 960px) {
-    .wrap { padding: 0 20px 80px; }
+    .wrap { padding: 0 24px 80px; }
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .grid-2, .grid-3, .grid-3-2 { grid-template-columns: 1fr; }
-    .resp-row { grid-template-columns: 1fr; gap: 4px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .resp-row { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
     .section-head { flex-direction: column; align-items: flex-start; }
     .section-head p { text-align: left; }
   }
   @media (max-width: 520px) {
     .kpi-grid { grid-template-columns: 1fr; }
-    .kpi-value { font-size: 42px; }
-    header.masthead { padding: 32px 0 24px; margin-bottom: 36px; }
-    .meta-strip { gap: 20px; }
+    .kpi-value { font-size: 40px; }
+    h1.title { font-size: 32px; }
+    header.masthead { padding: 24px 0; margin-bottom: 32px; }
   }
 
-  /* DEVTOOL DISCOURAGEMENT */
+  /* DEVTOOL DISCOURAGEMENT (Kept as original) */
   .warning-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--text-main);
+    color: #FFFFFF;
     z-index: 9999;
     align-items: center;
     justify-content: center;
@@ -574,10 +616,10 @@
   .warning-overlay.show { display: flex; }
   .warning-overlay h2 {
     font-size: 32px;
-    margin-bottom: 12px;
-    color: var(--accent-2);
+    margin-bottom: 16px;
+    color: var(--accent-rose);
   }
-  .warning-overlay p { color: rgba(245,241,232,0.7); font-size: 14px; }
+  .warning-overlay p { color: rgba(255,255,255,0.7); font-size: 16px; }
 
   img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 </style>
@@ -593,7 +635,15 @@
 
 <div class="wrap">
 
-  <!-- HEADER -->
+  <div class="top-nav reveal in">
+    <a href="index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      กลับหน้าหลัก
+    </a>
+  </div>
+
   <header class="masthead reveal">
     <div class="kicker">Internal Survey Report · 2026</div>
     <h1 class="title">
@@ -613,7 +663,6 @@
     </div>
   </header>
 
-  <!-- KPI ROW -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">01</span>ภาพรวมการใช้งาน</h2>
@@ -627,8 +676,8 @@
       </div>
       <div class="kpi">
         <div class="kpi-label">เครื่องมือยอดนิยม</div>
-        <div class="kpi-value" style="font-size:36px;line-height:1.1">Gemini</div>
-        <div class="kpi-foot">8 ผู้ตอบ ใช้ Google Gemini เป็นเครื่องมือหลัก</div>
+        <div class="kpi-value" style="font-size:38px;line-height:1.2">Gemini</div>
+        <div class="kpi-foot">8 ผู้ตอบ ใช้ Google Gemini เป็นหลัก</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">ค่าใช้จ่ายเฉลี่ย/เดือน</div>
@@ -636,14 +685,13 @@
         <div class="kpi-foot">เฉพาะผู้ที่จ่ายเองด้วยเงินส่วนตัว</div>
       </div>
       <div class="kpi">
-        <div class="kpi-label">ความสามารถที่ต้องการสูงสุด</div>
-        <div class="kpi-value" style="font-size:32px;line-height:1.15">Data<br>Analysis</div>
-        <div class="kpi-foot">7 ใน 8 คน อยากให้เก่งด้านวิเคราะห์ข้อมูล</div>
+        <div class="kpi-label">ความต้องการสูงสุด</div>
+        <div class="kpi-value" style="font-size:32px;line-height:1.25">Data<br>Analysis</div>
+        <div class="kpi-foot">7 ใน 8 คน อยากให้เก่งด้านวิเคราะห์</div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION: DEMOGRAPHICS & USAGE -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">02</span>การกระจายตัวของผู้ตอบ</h2>
@@ -664,7 +712,6 @@
     </div>
   </section>
 
-  <!-- SECTION: TOOLS -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">03</span>เครื่องมือ AI ที่นิยมใช้</h2>
@@ -677,32 +724,30 @@
     </div>
   </section>
 
-  <!-- SECTION: USE CASES (mergable) -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">04</span>การใช้งานในภาระงานต่าง ๆ</h2>
-      <p>หมวดหมู่สามารถ <strong style="color:var(--accent)">รวม/แยกได้</strong> โดยคลิกที่แท็กด้านล่าง</p>
+      <p>หมวดหมู่สามารถ <strong style="color:var(--primary)">รวม/แยกได้</strong> โดยคลิกที่แท็กด้านล่าง</p>
     </div>
 
     <div class="card">
       <div class="card-title">งานที่นำ AI มาช่วย</div>
       <div class="card-desc">ผมจัดหมวดหมู่จากคำตอบปลายเปิดของผู้ตอบ — คลิกแท็กเพื่อเลือกรวมเป็นหมวดเดียว แล้วกด "รวมหมวด"</div>
       <div class="merge-bar" id="mergeBar">
-        <span class="lbl">รวมหมวด:</span>
-        <span class="chip" data-cat="docs"><span class="dot" style="background:#E8553A"></span>งานเอกสาร</span>
-        <span class="chip" data-cat="media"><span class="dot" style="background:#2B6E72"></span>สื่อ/วิดีโอ/Content</span>
-        <span class="chip" data-cat="analysis"><span class="dot" style="background:#F2A65A"></span>วิเคราะห์ข้อมูล/สรุป</span>
-        <span class="chip" data-cat="search"><span class="dot" style="background:#8B5E83"></span>ค้นหา/หาความรู้</span>
-        <span class="chip" data-cat="code"><span class="dot" style="background:#5A8A3A"></span>เขียนโค้ด/CSS</span>
-        <span class="chip" data-cat="personal"><span class="dot" style="background:#C9956A"></span>เรื่องส่วนตัว</span>
-        <span class="chip chip-action" id="mergeBtn" disabled>↳ รวม</span>
+        <span class="lbl">รวมหมวดหมู่:</span>
+        <span class="chip" data-cat="docs"><span class="dot" style="background:#3B82F6"></span>งานเอกสาร</span>
+        <span class="chip" data-cat="media"><span class="dot" style="background:#10B981"></span>สื่อ/วิดีโอ/Content</span>
+        <span class="chip" data-cat="analysis"><span class="dot" style="background:#F59E0B"></span>วิเคราะห์ข้อมูล/สรุป</span>
+        <span class="chip" data-cat="search"><span class="dot" style="background:#8B5CF6"></span>ค้นหา/หาความรู้</span>
+        <span class="chip" data-cat="code"><span class="dot" style="background:#F43F5E"></span>เขียนโค้ด/CSS</span>
+        <span class="chip" data-cat="personal"><span class="dot" style="background:#64748B"></span>เรื่องส่วนตัว</span>
+        <span class="chip chip-action" id="mergeBtn" disabled>↳ รวมหมวด</span>
         <span class="chip chip-action" id="resetBtn">↺ รีเซ็ต</span>
       </div>
       <div class="chart-box"><canvas id="chUseCase"></canvas></div>
     </div>
   </section>
 
-  <!-- SECTION: CAPABILITY + SPEND -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">05</span>ความต้องการและการลงทุนส่วนตัว</h2>
@@ -722,7 +767,6 @@
     </div>
   </section>
 
-  <!-- SECTION: THEMES -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">06</span>ภาระงานที่ต้องการให้ AI ช่วย</h2>
@@ -730,22 +774,22 @@
     </div>
 
     <div class="theme-grid">
-      <div class="theme-card" style="--clr:#E8553A">
+      <div class="theme-card" style="--clr:#3B82F6">
         <div class="ic">01</div>
         <div class="h">งานเอกสาร/รายงาน</div>
         <div class="c">สรุปรายงานการประชุม จัดทำคู่มือ flow กระบวนการ ร่างเสนอโครงการ และจัดทำสถิติ</div>
       </div>
-      <div class="theme-card" style="--clr:#2B6E72">
+      <div class="theme-card" style="--clr:#10B981">
         <div class="ic">02</div>
         <div class="h">สื่อและคอนเทนต์</div>
         <div class="c">จัดทำภาพ/วิดีโอสั้น Infographic SEO และ CSS UX/UI สำหรับการนำเสนอออนไลน์</div>
       </div>
-      <div class="theme-card" style="--clr:#F2A65A">
+      <div class="theme-card" style="--clr:#F59E0B">
         <div class="ic">03</div>
         <div class="h">วิเคราะห์ข้อมูล</div>
         <div class="c">ประมวลผลข้อมูลระบบอาคารสถานที่ วิเคราะห์ข้อมูลและนำเสนอผลในรูปแบบที่เข้าใจง่าย</div>
       </div>
-      <div class="theme-card" style="--clr:#8B5E83">
+      <div class="theme-card" style="--clr:#8B5CF6">
         <div class="ic">04</div>
         <div class="h">ระบบจัดเก็บ/อัตโนมัติ</div>
         <div class="c">สร้างระบบจัดเก็บข้อมูลสารสนเทศภายในงาน วางแผนการทำงานระบบอาคาร และ Coding</div>
@@ -753,7 +797,6 @@
     </div>
   </section>
 
-  <!-- SECTION: QUOTES -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">07</span>เสียงจากผู้ตอบ</h2>
@@ -762,20 +805,19 @@
     <div class="quotes">
       <div class="quote">
         <p class="qt">ควรมีการอบรมการใช้งาน AI ให้บุคลากรอย่างต่อเนื่อง พร้อมกำหนดแนวทางการใช้งานที่เหมาะสมและปลอดภัย เพื่อให้สามารถนำ AI มาช่วยเพิ่มประสิทธิภาพการทำงาน ลดภาระงานซ้ำซ้อน และพัฒนาคุณภาพงานของหน่วยงานได้อย่างเต็มประสิทธิภาพ</p>
-        <div class="qm"><span><strong>วรรัตน์ อุ่นเมืองอินทร์</strong></span><span>งานนโยบายและแผน</span></div>
+        <div class="qm"><strong>วรรัตน์ อุ่นเมืองอินทร์</strong><span>งานนโยบายและแผน</span></div>
       </div>
       <div class="quote">
         <p class="qt">อยากให้จัดซื้อ Claude AI หรืออื่นใดที่เหมาะสมกับงานแต่ละท่านเพื่อ LEAN ขั้นตอน รวมถึงการจัดทำภาพเพื่อนำเสนอผ่านคอนเทนต์ การเขียน coding และจัดทำ SEO to HTML file</p>
-        <div class="qm"><span><strong>เธียรวิชญ์ พิชญนันท์กุล</strong></span><span>งานบริหารทั่วไป</span></div>
+        <div class="qm"><strong>เธียรวิชญ์ พิชญนันท์กุล</strong><span>งานบริหารทั่วไป</span></div>
       </div>
       <div class="quote">
         <p class="qt">ต้องใช้ระยะเวลาในการศึกษา เพื่อจะได้ทราบว่าภาระงานที่รับผิดชอบเหมาะสมกับ AI ประเภทใด — ตอนนี้มุ่งเน้นเรื่องการช่วยจัดทำข้อมูล วิเคราะห์ข้อมูลและการนำเสนอข้อมูล</p>
-        <div class="qm"><span><strong>ผู้ตอบหมายเลข 4</strong></span><span>งานการเงินการคลังและพัสดุ</span></div>
+        <div class="qm"><strong>ผู้ตอบหมายเลข 4</strong><span>งานการเงินการคลังและพัสดุ</span></div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION: DETAIL TABLE -->
   <section class="reveal">
     <div class="section-head">
       <h2><span class="num">08</span>รายละเอียดผู้ตอบรายบุคคล</h2>
@@ -794,15 +836,11 @@
 <script>
 // ============= ANTI INSPECT =============
 document.addEventListener('keydown', function(e) {
-  // F12
   if (e.keyCode === 123) { e.preventDefault(); flashWarn(); return false; }
-  // Ctrl+Shift+I / J / C
   if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
     e.preventDefault(); flashWarn(); return false;
   }
-  // Ctrl+U (view source)
   if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); flashWarn(); return false; }
-  // Ctrl+S (save)
   if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
 });
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
@@ -811,7 +849,6 @@ function flashWarn() {
   w.classList.add('show');
   setTimeout(() => w.classList.remove('show'), 1600);
 }
-// DevTools size check (simple)
 let _devOpen = false;
 setInterval(function() {
   const threshold = 160;
@@ -882,14 +919,14 @@ const SURVEY = [
     sugg:"ควรมีการอบรมการใช้งาน AI ให้บุคลากรอย่างต่อเนื่อง พร้อมกำหนดแนวทางการใช้งานที่เหมาะสมและปลอดภัย" }
 ];
 
-// ============= COLORS =============
-const PAL = ['#E8553A','#2B6E72','#F2A65A','#8B5E83','#5A8A3A','#C9956A','#3E5F8A','#A03C5E'];
-const INK = '#0E1A2B';
-const MUTED = '#6B7A8E';
+// ============= COLORS (Updated for Modern UI) =============
+const PAL = ['#4F46E5','#3B82F6','#10B981','#F59E0B','#F43F5E','#8B5CF6','#14B8A6','#64748B'];
+const INK = '#1E293B';
+const MUTED = '#64748B';
 
 // Global Chart defaults
 Chart.defaults.font.family = "'IBM Plex Sans Thai', sans-serif";
-Chart.defaults.color = INK;
+Chart.defaults.color = MUTED;
 Chart.defaults.font.size = 13;
 Chart.register(ChartDataLabels);
 Chart.defaults.plugins.datalabels.display = false;
@@ -904,19 +941,20 @@ new Chart(document.getElementById('chDept'), {
     datasets:[{
       data:Object.values(deptCount),
       backgroundColor:[PAL[0],PAL[1],PAL[2]],
-      borderColor:'#FFFCF5',
-      borderWidth:3
+      borderColor:'#FFFFFF',
+      borderWidth:4,
+      hoverOffset: 4
     }]
   },
   options:{
     responsive:true, maintainAspectRatio:false,
-    cutout:'62%',
+    cutout:'65%',
     plugins:{
-      legend:{position:'bottom', labels:{padding:14, boxWidth:12, font:{size:12}}},
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
       datalabels:{
         display:true,
-        color:'#FFFCF5',
-        font:{family:"'Prompt', sans-serif", weight:'700', size:16},
+        color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:14},
         formatter:(v,ctx)=>{
           const tot = ctx.dataset.data.reduce((a,b)=>a+b,0);
           return v + '\n' + Math.round(v/tot*100) + '%';
@@ -936,20 +974,21 @@ new Chart(document.getElementById('chUse'), {
     labels:Object.keys(useCount),
     datasets:[{
       data:Object.values(useCount),
-      backgroundColor:[PAL[1],PAL[0]],
-      borderColor:'#FFFCF5',
-      borderWidth:3
+      backgroundColor:[PAL[2], PAL[4]],
+      borderColor:'#FFFFFF',
+      borderWidth:4,
+      hoverOffset: 4
     }]
   },
   options:{
     responsive:true, maintainAspectRatio:false,
-    cutout:'62%',
+    cutout:'65%',
     plugins:{
-      legend:{position:'bottom', labels:{padding:14, boxWidth:12, font:{size:12}}},
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
       datalabels:{
         display:true,
-        color:'#FFFCF5',
-        font:{family:"'Prompt', sans-serif", weight:'700', size:18},
+        color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:16},
         formatter:(v,ctx)=>{
           const tot = ctx.dataset.data.reduce((a,b)=>a+b,0);
           return v + ' คน\n' + Math.round(v/tot*100) + '%';
@@ -974,7 +1013,7 @@ new Chart(document.getElementById('chTools'), {
       backgroundColor:sortedTools.map((_,i)=>PAL[i%PAL.length]),
       borderRadius:6,
       borderSkipped:false,
-      maxBarThickness:42
+      maxBarThickness:36
     }]
   },
   options:{
@@ -984,7 +1023,7 @@ new Chart(document.getElementById('chTools'), {
       legend:{display:false},
       datalabels:{
         display:true, anchor:'end', align:'end', offset:8,
-        color:INK, font:{weight:'700',size:14, family:"'Prompt', sans-serif"},
+        color:INK, font:{weight:'600',size:13, family:"'Prompt', sans-serif"},
         formatter:v=>v+' คน'
       }
     },
@@ -992,22 +1031,22 @@ new Chart(document.getElementById('chTools'), {
       x:{
         beginAtZero:true,
         max:Math.max(...sortedTools.map(x=>x[1]))+2,
-        grid:{color:'rgba(14,26,43,0.06)'},
-        ticks:{stepSize:1, color:MUTED}
+        grid:{color:'#F1F5F9'},
+        ticks:{stepSize:1}
       },
-      y:{grid:{display:false}, ticks:{color:INK, font:{weight:'600',size:13}}}
+      y:{grid:{display:false}, ticks:{color:INK, font:{weight:'500',size:13}}}
     }
   }
 });
 
 // ============= 4. USE CASE (mergable) =============
 let categories = [
-  {key:'docs', label:'งานเอกสาร', count:5, color:'#E8553A'},
-  {key:'media', label:'สื่อ/วิดีโอ/Content', count:2, color:'#2B6E72'},
-  {key:'analysis', label:'วิเคราะห์ข้อมูล/สรุป', count:4, color:'#F2A65A'},
-  {key:'search', label:'ค้นหา/หาความรู้', count:2, color:'#8B5E83'},
-  {key:'code', label:'เขียนโค้ด/CSS', count:1, color:'#5A8A3A'},
-  {key:'personal', label:'เรื่องส่วนตัว', count:1, color:'#C9956A'}
+  {key:'docs', label:'งานเอกสาร', count:5, color:'#3B82F6'},
+  {key:'media', label:'สื่อ/วิดีโอ/Content', count:2, color:'#10B981'},
+  {key:'analysis', label:'วิเคราะห์ข้อมูล/สรุป', count:4, color:'#F59E0B'},
+  {key:'search', label:'ค้นหา/หาความรู้', count:2, color:'#8B5CF6'},
+  {key:'code', label:'เขียนโค้ด/CSS', count:1, color:'#F43F5E'},
+  {key:'personal', label:'เรื่องส่วนตัว', count:1, color:'#64748B'}
 ];
 const ORIG_CATS = JSON.parse(JSON.stringify(categories));
 
@@ -1024,26 +1063,26 @@ function renderUseChart() {
         backgroundColor:categories.map(c=>c.color),
         borderRadius:6,
         borderSkipped:false,
-        maxBarThickness:60
+        maxBarThickness:48
       }]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      animation:{duration:600},
+      animation:{duration:500},
       plugins:{
         legend:{display:false},
         datalabels:{
-          display:true, anchor:'end', align:'top', offset:4,
-          color:INK, font:{weight:'700',size:14, family:"'Prompt', sans-serif"}
+          display:true, anchor:'end', align:'top', offset:6,
+          color:INK, font:{weight:'600',size:13, family:"'Prompt', sans-serif"}
         }
       },
       scales:{
         y:{
           beginAtZero:true,
-          grid:{color:'rgba(14,26,43,0.06)'},
-          ticks:{stepSize:1, color:MUTED}
+          grid:{color:'#F1F5F9'},
+          ticks:{stepSize:1}
         },
-        x:{grid:{display:false}, ticks:{color:INK, font:{weight:'600',size:12}}}
+        x:{grid:{display:false}, ticks:{color:INK, font:{weight:'500',size:12}}}
       }
     }
   });
@@ -1091,20 +1130,21 @@ new Chart(document.getElementById('chCap'), {
     labels:Object.keys(capCount),
     datasets:[{
       data:Object.values(capCount),
-      backgroundColor:[PAL[2],PAL[1],PAL[5]],
-      borderColor:'#FFFCF5',
-      borderWidth:3
+      backgroundColor:[PAL[3], PAL[5], PAL[7]],
+      borderColor:'#FFFFFF',
+      borderWidth:4,
+      hoverOffset: 4
     }]
   },
   options:{
     responsive:true, maintainAspectRatio:false,
-    cutout:'58%',
+    cutout:'62%',
     plugins:{
-      legend:{position:'bottom', labels:{padding:12, boxWidth:12, font:{size:11.5}}},
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:12}}},
       datalabels:{
         display:(c)=>c.dataset.data[c.dataIndex]>0,
-        color:'#FFFCF5',
-        font:{family:"'Prompt', sans-serif", weight:'700', size:15},
+        color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:14},
         formatter:v=>v
       }
     }
@@ -1112,7 +1152,6 @@ new Chart(document.getElementById('chCap'), {
 });
 
 // ============= 6. SPEND =============
-// Categorize: ฟรี/ไม่จ่าย (-, ไม่มี, ใช้ฟรี, NaN), <1000, ≥1000, USD-based
 const spendBucket = {'ใช้ฟรี/ไม่ระบุ':0, 'ต่ำกว่า 1,000 บาท':0, '1,000 บาทขึ้นไป':0, 'ชำระเป็น USD':0};
 SURVEY.forEach(r => {
   const s = (r.spend||'').toString().trim();
@@ -1132,20 +1171,21 @@ new Chart(document.getElementById('chSpend'), {
     labels:Object.keys(spendBucket),
     datasets:[{
       data:Object.values(spendBucket),
-      backgroundColor:[PAL[5],PAL[2],PAL[0],PAL[1]],
-      borderColor:'#FFFCF5',
-      borderWidth:3
+      backgroundColor:[PAL[7], PAL[2], PAL[0], PAL[4]],
+      borderColor:'#FFFFFF',
+      borderWidth:4,
+      hoverOffset: 4
     }]
   },
   options:{
     responsive:true, maintainAspectRatio:false,
-    cutout:'58%',
+    cutout:'62%',
     plugins:{
-      legend:{position:'bottom', labels:{padding:10, boxWidth:12, font:{size:11.5}}},
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:12}}},
       datalabels:{
         display:(c)=>c.dataset.data[c.dataIndex]>0,
-        color:'#FFFCF5',
-        font:{family:"'Prompt', sans-serif", weight:'700', size:14},
+        color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:14},
         formatter:v=>v
       }
     }
@@ -1165,7 +1205,7 @@ SURVEY.forEach(r => {
     <div class="resp">
       <div class="resp-head">
         <div class="nm"><span class="id">#${String(r.id).padStart(2,'0')}</span>${r.name}</div>
-        <div class="dept">${r.dept} · ${usePill}</div>
+        <div class="dept">${r.dept} ${usePill}</div>
       </div>
       <div class="resp-row"><div class="k">เครื่องมือที่ใช้</div><div class="v">${toolsHtml}</div></div>
       <div class="resp-row"><div class="k">ใช้ทำอะไร</div><div class="v">${r.forWhat||'—'}</div></div>
