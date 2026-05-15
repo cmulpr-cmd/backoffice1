@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายงานผลแบบสำรวจพฤติกรรมการทำงานและพื้นที่จัดเก็บข้อมูลอิเล็กทรอนิกส์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  :root {
+    /* Modern Cohesive Blue/Slate Theme */
+    --bg-body: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --text-main: #0F172A; /* Slate 900 */
+    --text-muted: #64748B; /* Slate 500 */
+    --border: #E2E8F0;
+    --border-light: #F1F5F9;
+    
+    /* Primary Colors (Monochromatic Blue Shades) */
+    --primary: #2563EB; /* Blue 600 */
+    --primary-light: #EFF6FF; /* Blue 50 */
+    --accent-1: #3B82F6; /* Blue 500 */
+    --accent-2: #60A5FA; /* Blue 400 */
+    --accent-3: #93C5FD; /* Blue 300 */
+    --accent-4: #0284C7; /* Sky 600 */
+    --accent-5: #0369A1; /* Sky 700 */
+    
+    /* Deep Accents for contrast */
+    --deep-ink: #1E3A8A; /* Blue 900 */
+    --deep-ink-light: #1E40AF; /* Blue 800 */
+
+    /* Shadows & Radii */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Soft Background Gradient */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; height: 100vh;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.04) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(2, 132, 199, 0.04) 0px, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px 120px;
+  }
+
+  /* TOP NAVIGATION (Back Button) */
+  .top-nav {
+    padding: 32px 0 0 0;
+    display: flex;
+    align-items: center;
+  }
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: var(--bg-card);
+    color: var(--text-main);
+    text-decoration: none;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+  }
+  .btn-back:hover {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .btn-back svg { width: 18px; height: 18px; }
+
+  /* HEADER */
+  header.masthead {
+    padding: 40px 0 40px;
+    margin-bottom: 40px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 24px;
+    font-weight: 600;
+    background: var(--primary-light);
+    padding: 6px 16px;
+    border-radius: 20px;
+  }
+  h1.title {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    max-width: 1000px;
+  }
+  h1.title em {
+    font-style: normal;
+    background: linear-gradient(120deg, var(--primary), var(--accent-4));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .sub {
+    margin-top: 24px;
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 760px;
+    line-height: 1.7;
+  }
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .meta-strip div span {
+    display: block;
+    color: var(--text-main);
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 6px;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    letter-spacing: 0;
+  }
+
+  /* SECTION HEADERS */
+  .section-head {
+    margin: 80px 0 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .section-head h2 {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 2.5vw, 30px);
+    letter-spacing: -0.01em;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-head h2 .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 600;
+    background: var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 8px;
+    letter-spacing: 0.05em;
+  }
+  .section-head p {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 400px;
+    text-align: right;
+  }
+
+  /* KEY INSIGHT */
+  .insight {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--primary);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+  }
+  .insight .big {
+    font-family: 'Prompt', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--primary);
+    letter-spacing: -0.03em;
+  }
+  .insight .body {
+    font-size: 16px;
+    color: var(--text-main);
+    line-height: 1.65;
+  }
+  .insight .body strong { color: var(--deep-ink); font-weight: 700; }
+
+  /* KPI ROW */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .kpi:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .kpi-label {
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .kpi-value {
+    font-family: 'Prompt', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+  }
+  .kpi-value .unit {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-left: 6px;
+  }
+  .kpi-foot {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    line-height: 1.5;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-light);
+  }
+  .kpi.accent { background: linear-gradient(135deg, var(--primary), var(--accent-4)); color: #FFFFFF; border: none; }
+  .kpi.accent .kpi-label, .kpi.accent .kpi-value .unit, .kpi.accent .kpi-foot { color: rgba(255,255,255,0.8); }
+  .kpi.accent .kpi-foot { border-top-color: rgba(255,255,255,0.2); }
+  .kpi.accent .kpi-value { color: #FFFFFF; }
+  
+  .kpi.danger { background: var(--deep-ink); color: #FFFFFF; border: none; }
+  .kpi.danger .kpi-label, .kpi.danger .kpi-value .unit, .kpi.danger .kpi-foot { color: rgba(255,255,255,0.75); }
+  .kpi.danger .kpi-foot { border-top-color: rgba(255,255,255,0.2); }
+  .kpi.danger .kpi-value { color: #FFFFFF; }
+
+  /* CHART CARDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .chart-box { position: relative; height: 320px; }
+  .chart-box.tall { height: 380px; }
+  .chart-box.short { height: 260px; }
+
+  /* CATEGORY MERGE CONTROLS */
+  .merge-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-body);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .merge-bar .lbl {
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    color: var(--text-main);
+    font-weight: 600;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    color: var(--text-main);
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+  }
+  .chip:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+  .chip.active { background: var(--primary); color: #FFFFFF; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+  .chip.active .dot { background: #FFFFFF; }
+  
+  .chip-action { background: var(--text-main); color: #FFFFFF; border-color: var(--text-main); }
+  .chip-action:hover { background: #000; border-color: #000; }
+  .chip-action:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .chip-action#resetBtnReason, .chip-action#resetBtnFile, .chip-action#resetBtnNas {
+    background: var(--bg-card); color: var(--text-main); border-color: var(--border);
+  }
+
+  /* QUOTES */
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .quote {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+  }
+  .quote::before {
+    content: '"';
+    position: absolute;
+    top: 10px; left: 24px;
+    font-family: 'Prompt', serif;
+    font-size: 80px;
+    font-weight: 800;
+    color: var(--primary-light);
+    line-height: 1;
+    z-index: 0;
+  }
+  .quote .qt {
+    position: relative;
+    z-index: 1;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-main);
+    font-weight: 400;
+    font-style: italic;
+  }
+  .quote .qm {
+    position: relative;
+    z-index: 1;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .quote .qm strong { color: var(--text-main); font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 15px; }
+
+  /* RECOMMENDATION CARDS */
+  .recs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .rec {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s;
+  }
+  .rec:hover { transform: translateY(-4px); }
+  .rec .ic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: var(--bg-body);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--clr, var(--primary));
+    margin-bottom: 20px;
+  }
+  .rec .h {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--text-main);
+  }
+  .rec .c { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+  /* RAW RESPONSES TABLE */
+  .responses-detail { display: grid; gap: 16px; }
+  .resp {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .resp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+  }
+  .resp-head .nm {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .resp-head .nm .id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--bg-body);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .resp-head .dept { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 12px; }
+  .resp-row {
+    display: grid; grid-template-columns: 220px 1fr; gap: 16px;
+    padding: 12px 0; align-items: baseline; border-bottom: 1px dashed var(--border-light);
+  }
+  .resp-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .resp-row .k { font-family: 'Prompt', sans-serif; font-size: 14px; color: var(--text-muted); font-weight: 500; }
+  .resp-row .v { color: var(--text-main); line-height: 1.6; font-size: 15px; }
+  
+  .pill {
+    display: inline-block; padding: 4px 12px; background: var(--bg-body);
+    border-radius: 20px; font-size: 13px; color: var(--text-main);
+    margin: 4px 6px 4px 0; border: 1px solid var(--border);
+  }
+  .pill.ok { background: #EFF6FF; color: #2563EB; border-color: #BFDBFE; font-weight: 600; }
+  .pill.warn { background: #F8FAFC; color: #475569; border-color: #CBD5E1; font-weight: 600; }
+
+  /* FOOTER */
+  footer {
+    margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border);
+    font-family: 'Prompt', sans-serif; font-size: 14px; color: var(--text-muted);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  footer strong { color: var(--text-main); font-weight: 600; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-body); }
+  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 960px) {
+    .wrap { padding: 0 24px 80px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .resp-row { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
+    .section-head { flex-direction: column; align-items: flex-start; }
+    .section-head p { text-align: left; }
+    .insight { grid-template-columns: 1fr; gap: 16px; }
+    .insight .big { font-size: 56px; }
+  }
+  @media (max-width: 520px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    .kpi-value { font-size: 40px; }
+    h1.title { font-size: 28px; }
+    header.masthead { padding: 24px 0; margin-bottom: 32px; }
+  }
+
+  /* DevTool Warning */
+  .warning-overlay {
+    display: none; position: fixed; inset: 0; background: var(--text-main);
+    color: #FFFFFF; z-index: 9999; align-items: center; justify-content: center;
+    text-align: center; padding: 40px; font-family: 'Prompt', sans-serif;
+  }
+  .warning-overlay.show { display: flex; }
+  .warning-overlay h2 { font-size: 32px; margin-bottom: 16px; color: var(--accent-2); }
+  .warning-overlay p { color: rgba(255,255,255,0.7); font-size: 16px; }
+  img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+</style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="warning-overlay" id="warnOverlay">
+  <div>
+    <h2>เนื้อหาได้รับการป้องกัน</h2>
+    <p>กรุณาปิดเครื่องมือพัฒนาเพื่อกลับเข้าสู่หน้าเว็บ</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="top-nav reveal in">
+    <a href="index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      กลับหน้าหลัก
+    </a>
+  </div>
+
+  <header class="masthead reveal">
+    <div class="kicker">Internal Survey Report · Storage Behavior</div>
+    <h1 class="title">
+      พฤติกรรมการทำงานและ<em>พื้นที่จัดเก็บข้อมูล</em><br>
+      อิเล็กทรอนิกส์ของบุคลากร
+    </h1>
+    <p class="sub">
+      รายงานวิเคราะห์การใช้งานพื้นที่จัดเก็บข้อมูล Cloud, NAS และ Local Drive
+      ของบุคลากรสำนักหอสมุด ครอบคลุมการลงทุนส่วนตัว
+      อุปสรรคในการใช้งานระบบเครือข่ายและความต้องการนโยบายสนับสนุน
+    </p>
+    <div class="meta-strip">
+      <div>RESPONDENTS<span>10 ท่าน</span></div>
+      <div>DEPARTMENTS<span>3 หน่วยงาน</span></div>
+      <div>SURVEY TYPE<span>Microsoft Forms</span></div>
+      <div>DATA STATUS<span>ประมวลผลครบถ้วน</span></div>
+    </div>
+  </header>
+
+  <section class="reveal">
+    <div class="insight">
+      <div class="big">80%</div>
+      <div class="body">
+        ของผู้ตอบ <strong>จำรหัสผ่าน NAS ของสำนักฯ ไม่ได้แล้ว</strong> และมีเพียง 3 จาก 10 คนเท่านั้นที่เคยใช้งาน
+        ขณะที่ <strong>4 ใน 10 คน ใช้เงินส่วนตัวจ่ายค่า Cloud Storage</strong> เพื่อทำงานอยู่แล้ว
+        ชี้ให้เห็นช่องว่างระหว่างทรัพยากรองค์กรที่มีอยู่กับการใช้งานจริง
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">01</span>ภาพรวมการใช้งาน</h2>
+      <p>ตัวเลขสำคัญที่สรุปสถานะการใช้พื้นที่จัดเก็บข้อมูลของบุคลากร</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi accent">
+        <div class="kpi-label">พื้นที่เครื่อง</div>
+        <div class="kpi-value">60<span class="unit">%</span></div>
+        <div class="kpi-foot">บอกว่าเพียงพอ · 40% ใกล้เต็มแล้ว</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">จ่าย Cloud เอง</div>
+        <div class="kpi-value">40<span class="unit">%</span></div>
+        <div class="kpi-foot">4 จาก 10 คน ใช้เงินส่วนตัวจ่ายเพิ่ม</div>
+      </div>
+      <div class="kpi danger">
+        <div class="kpi-label">ไม่เคยใช้ NAS</div>
+        <div class="kpi-value">70<span class="unit">%</span></div>
+        <div class="kpi-foot">7 คนไม่ทราบว่ามี / ไม่เคยใช้</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">ยินดีลงทุนเพิ่ม</div>
+        <div class="kpi-value">40<span class="unit">%</span></div>
+        <div class="kpi-foot">พร้อมจ่ายเงินซื้อพื้นที่เพิ่มในอนาคต</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">02</span>สัดส่วนผู้ตอบและสถานะพื้นที่</h2>
+      <p>การกระจายตัวของผู้ตอบตามหน่วยงาน และพื้นที่เครื่อง</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">สังกัดของผู้ตอบ</div>
+        <div class="card-desc">แบ่งตามงานที่สังกัดภายในสำนักหอสมุด</div>
+        <div class="chart-box"><canvas id="chDept"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">พื้นที่ Hard disk/SSD ในเครื่อง</div>
+        <div class="card-desc">เพียงพอต่อการใช้งานหรือไม่</div>
+        <div class="chart-box"><canvas id="chDisk"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">03</span>วิธีการทำงานกับไฟล์</h2>
+      <p>ช่องทางหลักที่ใช้ในการเปิด/บันทึก/จัดเก็บไฟล์งาน</p>
+    </div>
+    <div class="card">
+      <div class="card-title">ช่องทางการทำงานกับไฟล์</div>
+      <div class="card-desc">เลือกข้อที่ใช้บ่อยที่สุด — บางคนระบุมากกว่า 1 ช่องทาง</div>
+      <div class="chart-box"><canvas id="chMethod"></canvas></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">04</span>เหตุผลที่เลือกวิธีการนั้น</h2>
+      <p>หมวดหมู่สามารถ <strong style="color:var(--primary)">รวม/แยกได้</strong> โดยคลิกที่แท็กด้านล่าง</p>
+    </div>
+    <div class="card">
+      <div class="card-title">เหตุผลหลักในการเลือก</div>
+      <div class="card-desc">คลิกแท็กเพื่อเลือก ≥2 ตัวแล้วกด "↳ รวม" จะรวมเป็นหมวดเดียวกัน — กด "↺ รีเซ็ต" เพื่อกลับสู่ค่าเดิม</div>
+      <div class="merge-bar" id="mergeBarReason">
+        <span class="lbl">รวมหมวด:</span>
+        <span class="chip" data-cat="multi"><span class="dot" style="background:#2563EB"></span>เข้าถึงหลายอุปกรณ์</span>
+        <span class="chip" data-cat="speed"><span class="dot" style="background:#3B82F6"></span>เปิด/บันทึกเร็ว</span>
+        <span class="chip" data-cat="safe"><span class="dot" style="background:#60A5FA"></span>ป้องกันไฟล์สูญหาย</span>
+        <span class="chip" data-cat="offline"><span class="dot" style="background:#0284C7"></span>ทำงานออฟไลน์ได้</span>
+        <span class="chip" data-cat="space"><span class="dot" style="background:#0369A1"></span>พื้นที่เครื่องไม่พอ</span>
+        <span class="chip chip-action" id="mergeBtnReason" disabled>↳ รวม</span>
+        <span class="chip chip-action" id="resetBtnReason">↺ รีเซ็ต</span>
+      </div>
+      <div class="chart-box tall"><canvas id="chReason"></canvas></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">05</span>การใช้งาน Cloud Storage และค่าใช้จ่ายส่วนตัว</h2>
+      <p>รูปแบบการใช้งานและการลงทุนของผู้ตอบ</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">รูปแบบการใช้ Cloud</div>
+        <div class="card-desc">ใช้แบบฟรี vs จ่ายเงินส่วนตัวเพิ่ม</div>
+        <div class="chart-box"><canvas id="chCloud"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">ความจุที่ซื้อเพิ่ม</div>
+        <div class="card-desc">เฉพาะผู้ที่จ่ายเงินซื้อพื้นที่เพิ่มเติม</div>
+        <div class="chart-box"><canvas id="chCapacity"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">06</span>ไฟล์ที่ใช้พื้นที่จัดเก็บมากที่สุด</h2>
+      <p>หมวดหมู่สามารถ <strong style="color:var(--primary)">รวม/แยกได้</strong> ตามการพิจารณา</p>
+    </div>
+    <div class="card">
+      <div class="card-title">ประเภทไฟล์ตามขนาดการใช้พื้นที่</div>
+      <div class="card-desc">ผู้ตอบสามารถเลือกได้มากกว่า 1 ประเภท</div>
+      <div class="merge-bar" id="mergeBarFile">
+        <span class="lbl">รวมหมวด:</span>
+        <span class="chip" data-cat="docs"><span class="dot" style="background:#2563EB"></span>เอกสารทั่วไป (Word/Excel/PDF)</span>
+        <span class="chip" data-cat="backup"><span class="dot" style="background:#3B82F6"></span>Backup/ฐานข้อมูล</span>
+        <span class="chip" data-cat="video"><span class="dot" style="background:#60A5FA"></span>วิดีโอ/มัลติมีเดีย</span>
+        <span class="chip" data-cat="graphic"><span class="dot" style="background:#0284C7"></span>ภาพนิ่ง/กราฟิก</span>
+        <span class="chip chip-action" id="mergeBtnFile" disabled>↳ รวม</span>
+        <span class="chip chip-action" id="resetBtnFile">↺ รีเซ็ต</span>
+      </div>
+      <div class="chart-box"><canvas id="chFile"></canvas></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">07</span>สถานะการใช้งาน NAS ของสำนักฯ</h2>
+      <p>ระบบเครือข่ายที่จัดไว้ให้ — มีการใช้งานจริงเพียงใด</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">เคยใช้ NAS หรือไม่</div>
+        <div class="card-desc">7 ใน 10 ไม่เคยใช้งานหรือไม่ทราบว่ามี</div>
+        <div class="chart-box"><canvas id="chNas"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">ยังจำรหัสผ่าน NAS ได้หรือไม่</div>
+        <div class="card-desc">ส่วนใหญ่ลืมไปแล้วโดยสมบูรณ์</div>
+        <div class="chart-box"><canvas id="chPwd"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">08</span>อุปสรรคในการใช้ NAS</h2>
+      <p>เลือกได้มากกว่า 1 ข้อ · สามารถรวมหมวดได้</p>
+    </div>
+    <div class="card">
+      <div class="card-title">เหตุผลที่ทำให้ไม่ใช้งาน NAS</div>
+      <div class="card-desc">ความถี่ที่ผู้ตอบระบุปัญหาเหล่านี้</div>
+      <div class="merge-bar" id="mergeBarNas">
+        <span class="lbl">รวมหมวด:</span>
+        <span class="chip" data-cat="hard"><span class="dot" style="background:#2563EB"></span>ขั้นตอนยุ่งยาก</span>
+        <span class="chip" data-cat="forgot"><span class="dot" style="background:#3B82F6"></span>ลืมรหัสผ่าน</span>
+        <span class="chip" data-cat="unneeded"><span class="dot" style="background:#60A5FA"></span>ไม่จำเป็น (มีทางอื่นสะดวก)</span>
+        <span class="chip" data-cat="remote"><span class="dot" style="background:#0284C7"></span>เข้าจากภายนอกลำบาก</span>
+        <span class="chip" data-cat="own"><span class="dot" style="background:#0369A1"></span>ใช้พื้นที่ตัวเอง</span>
+        <span class="chip chip-action" id="mergeBtnNas" disabled>↳ รวม</span>
+        <span class="chip chip-action" id="resetBtnNas">↺ รีเซ็ต</span>
+      </div>
+      <div class="chart-box tall"><canvas id="chNasBar"></canvas></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">09</span>ความยินดีในการลงทุนเพิ่มในอนาคต</h2>
+      <p>หากพื้นที่ไม่เพียงพอ จะใช้เงินส่วนตัวซื้อเพิ่มหรือไม่</p>
+    </div>
+    <div class="card">
+      <div class="card-title">แผนการจัดซื้อพื้นที่เพิ่ม</div>
+      <div class="card-desc">สะท้อนความต้องการนโยบายสนับสนุนจากองค์กร</div>
+      <div class="chart-box short"><canvas id="chWill"></canvas></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">10</span>ข้อค้นพบและข้อเสนอแนะเชิงนโยบาย</h2>
+      <p>ประเด็นที่ควรพิจารณาเพื่อพัฒนาระบบสนับสนุน</p>
+    </div>
+    <div class="recs">
+      <div class="rec" style="--clr:var(--primary)">
+        <div class="ic">01</div>
+        <div class="h">ฟื้นฟูระบบ NAS</div>
+        <div class="c">ส่วนใหญ่ลืมรหัสผ่านและไม่ทราบว่ามี — ควรประชาสัมพันธ์ใหม่ พร้อมเอกสารคู่มือใช้งานที่กระชับ และ Workshop การใช้งานจริง</div>
+      </div>
+      <div class="rec" style="--clr:var(--accent-1)">
+        <div class="ic">02</div>
+        <div class="h">สนับสนุนพื้นที่ Cloud</div>
+        <div class="c">40% จ่ายเงินเองอยู่แล้ว — สำนักฯ ควรพิจารณานโยบายสนับสนุนพื้นที่ Cloud สำหรับหน่วยที่ใช้ไฟล์ขนาดใหญ่ เช่น สื่อสารองค์กร แผนฯ</div>
+      </div>
+      <div class="rec" style="--clr:var(--accent-4)">
+        <div class="ic">03</div>
+        <div class="h">ยึดผู้ใช้เป็นศูนย์กลาง</div>
+        <div class="c">ระบบที่ยืดหยุ่นและทำ Work from Anywhere ได้เป็นเรื่องสำคัญ — แทนการบังคับใช้ระบบกลางเพียงระบบเดียว ควรเปิดทางเลือกที่เหมาะกับลักษณะงาน</div>
+      </div>
+      <div class="rec" style="--clr:var(--accent-5)">
+        <div class="ic">04</div>
+        <div class="h">จัดการไฟล์เอกสารหลัก</div>
+        <div class="c">70% ระบุว่าไฟล์เอกสารทั่วไป (Word/Excel/PDF) คือกลุ่มที่กินพื้นที่มากที่สุด — ควรแนะนำการใช้ระบบ CMU e-Document หรือ Document Management System</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">11</span>เสียงจากผู้ตอบ</h2>
+      <p>ข้อเสนอแนะที่สะท้อนความต้องการของบุคลากร</p>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p class="qt">ขอเสนอให้หน่วยงานพิจารณาจัดหาพื้นที่จัดเก็บข้อมูล (Data Storage) ที่เน้นผู้ใช้งานเป็นศูนย์กลาง (User-centric) โดยเลือกระบบที่มีความยืดหยุ่นและเอื้อต่อการปฏิบัติงานจริง แทนการกำหนดให้ใช้เพียงระบบส่วนกลาง ซึ่งบางครั้งไม่สอดคล้องกับลักษณะงาน (เช่น ไฟล์สื่อขนาดใหญ่)</p>
+        <div class="qm"><span><strong>ผู้ตอบ #03</strong></span><span>งานบริหารทั่วไป</span></div>
+      </div>
+      <div class="quote">
+        <p class="qt">เนื่องจากนโยบายของ มช. เป็นดิจิทัล และสามารถทำงานที่ไหนก็ได้ ก็ควรจะซัพพอร์ตเรื่องพื้นที่จัดเก็บข้อมูลให้สอดคล้องกับนโยบายของ มช.</p>
+        <div class="qm"><span><strong>ผู้ตอบ #05</strong></span><span>งานการเงิน การคลัง และพัสดุ</span></div>
+      </div>
+      <div class="quote">
+        <p class="qt">หากเป็นไปได้อยากให้สำนักฯ สนับสนุนด้านพื้นที่จัดเก็บข้อมูลสำหรับหน่วยที่ใช้พื้นที่ในการจัดเก็บเยอะ เช่น หน่วยสื่อสารองค์กร งานแผนฯ เป็นต้น</p>
+        <div class="qm"><span><strong>ผู้ตอบ #02</strong></span><span>งานบริหารทั่วไป</span></div>
+      </div>
+      <div class="quote">
+        <p class="qt">ถ้าพื้นที่ใน Microsoft Teams ยังไม่จำกัดพื้นที่ ก็ยังสามารถมีพื้นที่ใช้งานได้ปกติ</p>
+        <div class="qm"><span><strong>ผู้ตอบ #09</strong></span><span>งานนโยบายและแผน</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-head">
+      <h2><span class="num">12</span>รายละเอียดผู้ตอบรายบุคคล</h2>
+      <p>ข้อมูลครบทั้งหมด 10 รายการ เลื่อนดูได้</p>
+    </div>
+    <div class="responses-detail" id="respList"></div>
+  </section>
+
+  <footer>
+    <div><strong>รายงานวิเคราะห์แบบสำรวจพื้นที่จัดเก็บข้อมูล</strong> · สำนักหอสมุด</div>
+    <div>เอกสารสำหรับใช้ภายในเท่านั้น · พฤษภาคม 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// ============= ANTI INSPECT =============
+document.addEventListener('keydown', function(e) {
+  if (e.keyCode === 123) { e.preventDefault(); flashWarn(); return false; }
+  if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+    e.preventDefault(); flashWarn(); return false;
+  }
+  if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); flashWarn(); return false; }
+  if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
+});
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
+function flashWarn() {
+  const w = document.getElementById('warnOverlay');
+  w.classList.add('show');
+  setTimeout(() => w.classList.remove('show'), 1600);
+}
+let _devOpen = false;
+setInterval(function() {
+  const t = 160;
+  if (window.outerWidth - window.innerWidth > t || window.outerHeight - window.innerHeight > t) {
+    if (!_devOpen) { _devOpen = true; flashWarn(); }
+  } else { _devOpen = false; }
+}, 1500);
+
+// ============= REVEAL =============
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ============= DATA =============
+const SURVEY = [
+  { id:1, dept:"งานบริหารทั่วไป", disk:"เพียงพอ",
+    method:["โฟลเดอร์ Sync (Drive/OneDrive Desktop)"],
+    reasons:["เน็ตเสถียร/ออฟไลน์","หลายอุปกรณ์","ป้องกันไฟล์สูญหาย","เปิด/บันทึกเร็ว"],
+    cloud:"ใช้พื้นที่ฟรี", spend:"0", capacity:"ไม่ได้ซื้อ", sufficient:"—",
+    futurePlan:"ยินดีซื้อเพิ่ม",
+    fileTypes:["เอกสาร Word/Excel/PDF","ภาพนิ่ง/กราฟิก (PSD/AI)"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"จำไม่ได้",
+    nasIssues:["ไม่จำเป็น"], suggest:"—" },
+  { id:2, dept:"งานบริหารทั่วไป", disk:"เพียงพอ",
+    method:["โฟลเดอร์ Sync (Drive/OneDrive Desktop)"],
+    reasons:["เปิด/บันทึกเร็ว","เน็ตเสถียร/ออฟไลน์","หลายอุปกรณ์","ป้องกันไฟล์สูญหาย"],
+    cloud:"ใช้พื้นที่ฟรี", spend:"—", capacity:"—", sufficient:"—",
+    futurePlan:"ไม่ต้องการซื้อเพิ่ม",
+    fileTypes:["เอกสาร Word/Excel/PDF","Backup/ฐานข้อมูล"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"จำไม่ได้",
+    nasIssues:["ขั้นตอนยุ่งยาก"],
+    suggest:"อยากให้สำนักฯ สนับสนุนพื้นที่จัดเก็บข้อมูลสำหรับหน่วยที่ใช้พื้นที่เยอะ เช่น หน่วยสื่อสารองค์กร งานแผนฯ" },
+  { id:3, dept:"งานบริหารทั่วไป", disk:"ไม่เพียงพอ",
+    method:["โฟลเดอร์ Sync","Local Drive (C:, D:)"],
+    reasons:["หลายอุปกรณ์"],
+    cloud:"ใช้พื้นที่ฟรี", spend:"0", capacity:"1 TB - 2 TB", sufficient:"เพียงพอ",
+    futurePlan:"ยินดีซื้อเพิ่ม",
+    fileTypes:["วิดีโอ/มัลติมีเดีย"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"จำไม่ได้",
+    nasIssues:["ขั้นตอนยุ่งยาก","เข้าจากภายนอกลำบาก","ลืมรหัสผ่าน","ไม่จำเป็น"],
+    suggest:"จัดหาพื้นที่ Data Storage ที่เน้นผู้ใช้เป็นศูนย์กลาง (User-centric) ระบบที่ยืดหยุ่นเอื้อต่อการปฏิบัติงานจริง แทนระบบส่วนกลางที่บางครั้งไม่สอดคล้องกับลักษณะงาน เช่น ไฟล์สื่อขนาดใหญ่" },
+  { id:4, dept:"งานการเงิน การคลัง และพัสดุ", disk:"เพียงพอ",
+    method:["โฟลเดอร์ Sync"],
+    reasons:["เปิด/บันทึกเร็ว","หลายอุปกรณ์","ป้องกันไฟล์สูญหาย"],
+    cloud:"จ่ายเงินส่วนตัวเพิ่ม", spend:"300 บาท", capacity:"1 TB - 2 TB", sufficient:"เพียงพอ",
+    futurePlan:"ไม่ต้องการซื้อเพิ่ม",
+    fileTypes:["เอกสาร Word/Excel/PDF"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"จำไม่ได้",
+    nasIssues:["ใช้พื้นที่ของตนเอง"],
+    suggest:"ยังไม่มีความต้องการ พื้นที่ของตนเองยังเหลือเพียงพอ และหากใกล้เต็มอาจนำไฟล์ไปฝากที่ CMU e-Document" },
+  { id:5, dept:"งานการเงิน การคลัง และพัสดุ", disk:"ไม่เพียงพอ",
+    method:["โฟลเดอร์ Sync"],
+    reasons:["เปิด/บันทึกเร็ว","หลายอุปกรณ์","พื้นที่เครื่องไม่พอ"],
+    cloud:"จ่ายเงินส่วนตัวเพิ่ม", spend:"450/ปี", capacity:"1 TB - 2 TB", sufficient:"เพียงพอ",
+    futurePlan:"ยินดีซื้อเพิ่ม",
+    fileTypes:["เอกสาร Word/Excel/PDF"],
+    nasUse:"เคยใช้งาน", nasPwd:"จำไม่ได้",
+    nasIssues:["ขั้นตอนยุ่งยาก","เข้าจากภายนอกลำบาก","ไม่จำเป็น"],
+    suggest:"นโยบาย มช. เป็นดิจิทัล ทำงานที่ไหนก็ได้ ก็ควรซัพพอร์ตเรื่องพื้นที่จัดเก็บข้อมูลให้สอดคล้องกับนโยบาย มช." },
+  { id:6, dept:"งานการเงิน การคลัง และพัสดุ", disk:"เพียงพอ",
+    method:["โฟลเดอร์ Sync","Local Drive (C:, D:)"],
+    reasons:["หลายอุปกรณ์","เปิด/บันทึกเร็ว"],
+    cloud:"จ่ายเงินส่วนตัวเพิ่ม", spend:"500/ปี", capacity:"1 TB - 2 TB", sufficient:"เพียงพอ",
+    futurePlan:"ไม่ต้องการซื้อเพิ่ม",
+    fileTypes:["เอกสาร Word/Excel/PDF"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"จำไม่ได้",
+    nasIssues:["ลืมรหัสผ่าน","ไม่จำเป็น"],
+    suggest:"—" },
+  { id:7, dept:"งานบริหารทั่วไป", disk:"เพียงพอ",
+    method:["External Hard Disk","Web Browser (Drive/OneDrive)"],
+    reasons:["เปิด/บันทึกเร็ว","หลายอุปกรณ์","ป้องกันไฟล์สูญหาย"],
+    cloud:"ใช้พื้นที่ฟรี", spend:"0", capacity:"ไม่มี", sufficient:"เพียงพอ",
+    futurePlan:"ไม่ต้องการซื้อเพิ่ม",
+    fileTypes:["เอกสาร Word/Excel/PDF"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"จำไม่ได้",
+    nasIssues:["ลืมรหัสผ่าน"],
+    suggest:"—" },
+  { id:8, dept:"งานบริหารทั่วไป", disk:"เพียงพอ",
+    method:["Local Drive (C:, D:)"],
+    reasons:[],
+    cloud:"ใช้พื้นที่ฟรี", spend:"—", capacity:"—", sufficient:"—",
+    futurePlan:"—",
+    fileTypes:["Backup/ฐานข้อมูล"],
+    nasUse:"ไม่เคยใช้/ไม่ทราบ", nasPwd:"—",
+    nasIssues:[], suggest:"—" },
+  { id:9, dept:"งานนโยบายและแผน", disk:"ไม่เพียงพอ",
+    method:["Local Drive (C:, D:)"],
+    reasons:["เปิด/บันทึกเร็ว"],
+    cloud:"ใช้พื้นที่ฟรี", spend:"—", capacity:"—", sufficient:"—",
+    futurePlan:"ยินดีซื้อเพิ่ม",
+    fileTypes:["วิดีโอ/มัลติมีเดีย","Backup/ฐานข้อมูล"],
+    nasUse:"เคยใช้งาน", nasPwd:"จำได้แต่ไม่ได้ใช้",
+    nasIssues:["ขั้นตอนยุ่งยาก"],
+    suggest:"ถ้าพื้นที่ใน Microsoft Teams ยังไม่จำกัด ก็ยังสามารถมีพื้นที่ใช้งานได้ปกติ" },
+  { id:10, dept:"งานนโยบายและแผน", disk:"ไม่เพียงพอ",
+    method:["Web Browser (Drive/OneDrive)"],
+    reasons:["หลายอุปกรณ์"],
+    cloud:"จ่ายเงินส่วนตัวเพิ่ม", spend:"394.50/ปี", capacity:"1 TB - 2 TB", sufficient:"เพียงพอ",
+    futurePlan:"—",
+    fileTypes:[],
+    nasUse:"เคยใช้งาน", nasPwd:"จำไม่ได้",
+    nasIssues:["ไม่จำเป็น","ลืมรหัสผ่าน"],
+    suggest:"—" }
+];
+
+// ============= COLORS (Blue/Slate Cohesive Theme) =============
+const PAL = ['#2563EB','#3B82F6','#60A5FA','#93C5FD','#0284C7','#0369A1','#1E40AF','#1E3A8A'];
+const INK = '#0F172A';
+const MUTED = '#64748B';
+
+Chart.defaults.font.family = "'IBM Plex Sans Thai', sans-serif";
+Chart.defaults.color = MUTED;
+Chart.defaults.font.size = 13;
+Chart.register(ChartDataLabels);
+Chart.defaults.plugins.datalabels.display = false;
+
+// ============= 1. DEPARTMENT =============
+const deptCount = {};
+SURVEY.forEach(r => deptCount[r.dept] = (deptCount[r.dept]||0)+1);
+new Chart(document.getElementById('chDept'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(deptCount),
+    datasets:[{
+      data:Object.values(deptCount),
+      backgroundColor:[PAL[0],PAL[1],PAL[2]],
+      borderColor:'#FFFFFF', borderWidth:4, hoverOffset: 4
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'65%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
+      datalabels:{display:true, color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:14},
+        formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0); return v+'\n'+Math.round(v/t*100)+'%';},
+        textAlign:'center'}
+    }
+  }
+});
+
+// ============= 2. DISK SUFFICIENT =============
+const diskCount = {'เพียงพอ':0, 'ไม่เพียงพอ / ใกล้จะเต็มแล้ว':0};
+SURVEY.forEach(r => diskCount[r.disk==='เพียงพอ'?'เพียงพอ':'ไม่เพียงพอ / ใกล้จะเต็มแล้ว']++);
+new Chart(document.getElementById('chDisk'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(diskCount),
+    datasets:[{
+      data:Object.values(diskCount),
+      backgroundColor:[PAL[2],PAL[4]],
+      borderColor:'#FFFFFF', borderWidth:4, hoverOffset: 4
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'65%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
+      datalabels:{display:true, color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:16},
+        formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0); return v+' คน\n'+Math.round(v/t*100)+'%';},
+        textAlign:'center'}
+    }
+  }
+});
+
+// ============= 3. METHOD =============
+const methodCount = {};
+SURVEY.forEach(r => r.method.forEach(m => methodCount[m]=(methodCount[m]||0)+1));
+const sortedMethod = Object.entries(methodCount).sort((a,b)=>b[1]-a[1]);
+new Chart(document.getElementById('chMethod'), {
+  type:'bar',
+  data:{
+    labels:sortedMethod.map(x=>x[0]),
+    datasets:[{
+      label:'จำนวนผู้ใช้',
+      data:sortedMethod.map(x=>x[1]),
+      backgroundColor:sortedMethod.map((_,i)=>PAL[i%PAL.length]),
+      borderRadius:6, borderSkipped:false, maxBarThickness:36
+    }]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      datalabels:{display:true, anchor:'end', align:'end', offset:8,
+        color:INK, font:{weight:'600',size:13, family:"'Prompt', sans-serif"}, formatter:v=>v+' คน'}
+    },
+    scales:{
+      x:{beginAtZero:true, max:Math.max(...sortedMethod.map(x=>x[1]))+2,
+        grid:{color:'#F1F5F9'}, ticks:{stepSize:1}},
+      y:{grid:{display:false}, ticks:{color:INK, font:{weight:'500',size:13}}}
+    }
+  }
+});
+
+// ============= GENERIC MERGEABLE CHART FACTORY =============
+function makeMergeable(opts) {
+  const orig = JSON.parse(JSON.stringify(opts.categories));
+  let cats = JSON.parse(JSON.stringify(opts.categories));
+  let chart;
+  const sel = new Set();
+
+  function render() {
+    if (chart) chart.destroy();
+    chart = new Chart(document.getElementById(opts.canvasId), {
+      type:'bar',
+      data:{
+        labels:cats.map(c=>c.label),
+        datasets:[{
+          label:'จำนวน',
+          data:cats.map(c=>c.count),
+          backgroundColor:cats.map(c=>c.color),
+          borderRadius:6, borderSkipped:false, maxBarThickness:48
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        animation:{duration:500},
+        plugins:{
+          legend:{display:false},
+          datalabels:{display:true, anchor:'end', align:'top', offset:6,
+            color:INK, font:{weight:'600',size:13, family:"'Prompt', sans-serif"}}
+        },
+        scales:{
+          y:{beginAtZero:true, grid:{color:'#F1F5F9'}, ticks:{stepSize:1}},
+          x:{grid:{display:false}, ticks:{color:INK, font:{weight:'500',size:12}, maxRotation:0, autoSkip:false,
+            callback:function(v){
+              const lbl = this.getLabelForValue(v);
+              if (lbl.length > 18) {
+                const parts = []; let cur = '';
+                lbl.split(' ').forEach(w=>{
+                  if ((cur+' '+w).length > 18) { parts.push(cur); cur = w; }
+                  else cur = cur ? cur+' '+w : w;
+                });
+                if (cur) parts.push(cur);
+                return parts;
+              }
+              return lbl;
+            }}}
+        }
+      }
+    });
+  }
+  render();
+
+  document.querySelectorAll(`#${opts.barId} .chip[data-cat]`).forEach(chip => {
+    chip.addEventListener('click', () => {
+      const k = chip.dataset.cat;
+      if (sel.has(k)) { sel.delete(k); chip.classList.remove('active'); }
+      else { sel.add(k); chip.classList.add('active'); }
+      document.getElementById(opts.mergeBtnId).disabled = sel.size < 2;
+    });
+  });
+  document.getElementById(opts.mergeBtnId).addEventListener('click', () => {
+    if (sel.size < 2) return;
+    const merging = cats.filter(c => sel.has(c.key));
+    const remain = cats.filter(c => !sel.has(c.key));
+    cats = [...remain, {
+      key:'merged_'+Date.now(),
+      label:merging.map(c=>c.label).join(' + '),
+      count:merging.reduce((s,c)=>s+c.count,0),
+      color:merging[0].color
+    }];
+    sel.clear();
+    document.querySelectorAll(`#${opts.barId} .chip[data-cat]`).forEach(c=>c.classList.remove('active'));
+    document.getElementById(opts.mergeBtnId).disabled = true;
+    render();
+  });
+  document.getElementById(opts.resetBtnId).addEventListener('click', () => {
+    cats = JSON.parse(JSON.stringify(orig));
+    sel.clear();
+    document.querySelectorAll(`#${opts.barId} .chip[data-cat]`).forEach(c=>c.classList.remove('active'));
+    document.getElementById(opts.mergeBtnId).disabled = true;
+    render();
+  });
+}
+
+// ============= 4. REASONS (mergeable) =============
+const reasonRaw = {
+  'หลายอุปกรณ์': 0, 'เปิด/บันทึกเร็ว': 0, 'ป้องกันไฟล์สูญหาย': 0,
+  'เน็ตเสถียร/ออฟไลน์': 0, 'พื้นที่เครื่องไม่พอ': 0
+};
+SURVEY.forEach(r => r.reasons.forEach(x => { if (x in reasonRaw) reasonRaw[x]++; }));
+makeMergeable({
+  canvasId:'chReason', barId:'mergeBarReason',
+  mergeBtnId:'mergeBtnReason', resetBtnId:'resetBtnReason',
+  categories:[
+    {key:'multi', label:'เข้าถึงหลายอุปกรณ์', count:reasonRaw['หลายอุปกรณ์'], color:'#2563EB'},
+    {key:'speed', label:'เปิด/บันทึกเร็ว', count:reasonRaw['เปิด/บันทึกเร็ว'], color:'#3B82F6'},
+    {key:'safe', label:'ป้องกันไฟล์สูญหาย', count:reasonRaw['ป้องกันไฟล์สูญหาย'], color:'#60A5FA'},
+    {key:'offline', label:'ทำงานออฟไลน์ได้', count:reasonRaw['เน็ตเสถียร/ออฟไลน์'], color:'#0284C7'},
+    {key:'space', label:'พื้นที่เครื่องไม่พอ', count:reasonRaw['พื้นที่เครื่องไม่พอ'], color:'#0369A1'}
+  ]
+});
+
+// ============= 5. CLOUD USAGE =============
+const cloudCount = {'ใช้พื้นที่ฟรี':0, 'จ่ายเงินส่วนตัวเพิ่ม':0};
+SURVEY.forEach(r => cloudCount[r.cloud]++);
+new Chart(document.getElementById('chCloud'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(cloudCount),
+    datasets:[{data:Object.values(cloudCount),
+      backgroundColor:[PAL[1],PAL[6]], borderColor:'#FFFFFF', borderWidth:4, hoverOffset:4}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'62%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
+      datalabels:{display:true, color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:16},
+        formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0); return v+' คน\n'+Math.round(v/t*100)+'%';},
+        textAlign:'center'}
+    }
+  }
+});
+
+// ============= 6. CAPACITY PURCHASED =============
+const capRaw = {};
+SURVEY.forEach(r => {
+  let c = r.capacity;
+  if (!c || c==='—' || c==='ไม่ได้ซื้อ' || c==='ไม่มี') c = 'ไม่ได้ซื้อ/ไม่ระบุ';
+  capRaw[c] = (capRaw[c]||0)+1;
+});
+new Chart(document.getElementById('chCapacity'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(capRaw),
+    datasets:[{data:Object.values(capRaw),
+      backgroundColor:[PAL[2],PAL[4]], borderColor:'#FFFFFF', borderWidth:4, hoverOffset:4}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'62%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
+      datalabels:{display:true, color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:14},
+        formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0); return v+'\n'+Math.round(v/t*100)+'%';},
+        textAlign:'center'}
+    }
+  }
+});
+
+// ============= 7. FILE TYPES (mergeable) =============
+const fileMap = {
+  'เอกสาร Word/Excel/PDF':0, 'Backup/ฐานข้อมูล':0, 'วิดีโอ/มัลติมีเดีย':0, 'ภาพนิ่ง/กราฟิก (PSD/AI)':0
+};
+SURVEY.forEach(r => r.fileTypes.forEach(f => { if (f in fileMap) fileMap[f]++; }));
+makeMergeable({
+  canvasId:'chFile', barId:'mergeBarFile',
+  mergeBtnId:'mergeBtnFile', resetBtnId:'resetBtnFile',
+  categories:[
+    {key:'docs', label:'เอกสาร Word/Excel/PDF', count:fileMap['เอกสาร Word/Excel/PDF'], color:'#2563EB'},
+    {key:'backup', label:'Backup/ฐานข้อมูล', count:fileMap['Backup/ฐานข้อมูล'], color:'#3B82F6'},
+    {key:'video', label:'วิดีโอ/มัลติมีเดีย', count:fileMap['วิดีโอ/มัลติมีเดีย'], color:'#60A5FA'},
+    {key:'graphic', label:'ภาพนิ่ง/กราฟิก', count:fileMap['ภาพนิ่ง/กราฟิก (PSD/AI)'], color:'#0284C7'}
+  ]
+});
+
+// ============= 8. NAS USE =============
+const nasUse = {'ไม่เคยใช้/ไม่ทราบ':0, 'เคยใช้งาน':0};
+SURVEY.forEach(r => { nasUse[r.nasUse==='เคยใช้งาน'?'เคยใช้งาน':'ไม่เคยใช้/ไม่ทราบ']++; });
+new Chart(document.getElementById('chNas'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(nasUse),
+    datasets:[{data:Object.values(nasUse),
+      backgroundColor:[PAL[5],PAL[0]], borderColor:'#FFFFFF', borderWidth:4, hoverOffset:4}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'62%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:13}}},
+      datalabels:{display:true, color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:16},
+        formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0); return v+' คน\n'+Math.round(v/t*100)+'%';},
+        textAlign:'center'}
+    }
+  }
+});
+
+// ============= 9. NAS PASSWORD =============
+const pwd = {'จำไม่ได้':0, 'จำได้แต่ไม่ได้ใช้':0, 'ไม่ระบุ':0};
+SURVEY.forEach(r => {
+  if (r.nasPwd === 'จำไม่ได้') pwd['จำไม่ได้']++;
+  else if (r.nasPwd === 'จำได้แต่ไม่ได้ใช้') pwd['จำได้แต่ไม่ได้ใช้']++;
+  else pwd['ไม่ระบุ']++;
+});
+new Chart(document.getElementById('chPwd'), {
+  type:'doughnut',
+  data:{
+    labels:Object.keys(pwd),
+    datasets:[{data:Object.values(pwd),
+      backgroundColor:[PAL[6],PAL[2],PAL[4]], borderColor:'#FFFFFF', borderWidth:4, hoverOffset:4}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'62%',
+    plugins:{
+      legend:{position:'bottom', labels:{padding:16, boxWidth:12, font:{size:12}}},
+      datalabels:{display:(c)=>c.dataset.data[c.dataIndex]>0, color:'#FFFFFF',
+        font:{family:"'Prompt', sans-serif", weight:'600', size:14},
+        formatter:v=>v}
+    }
+  }
+});
+
+// ============= 10. NAS BARRIERS (mergeable) =============
+const nasMap = {
+  'ขั้นตอนยุ่งยาก':0, 'ลืมรหัสผ่าน':0, 'ไม่จำเป็น':0, 'เข้าจากภายนอกลำบาก':0, 'ใช้พื้นที่ของตนเอง':0
+};
+SURVEY.forEach(r => r.nasIssues.forEach(x => { if (x in nasMap) nasMap[x]++; }));
+makeMergeable({
+  canvasId:'chNasBar', barId:'mergeBarNas',
+  mergeBtnId:'mergeBtnNas', resetBtnId:'resetBtnNas',
+  categories:[
+    {key:'hard', label:'ขั้นตอนยุ่งยาก', count:nasMap['ขั้นตอนยุ่งยาก'], color:'#2563EB'},
+    {key:'forgot', label:'ลืมรหัสผ่าน', count:nasMap['ลืมรหัสผ่าน'], color:'#3B82F6'},
+    {key:'unneeded', label:'ไม่จำเป็น มีทางอื่น', count:nasMap['ไม่จำเป็น'], color:'#60A5FA'},
+    {key:'remote', label:'เข้าจากภายนอกลำบาก', count:nasMap['เข้าจากภายนอกลำบาก'], color:'#0284C7'},
+    {key:'own', label:'ใช้พื้นที่ตัวเอง', count:nasMap['ใช้พื้นที่ของตนเอง'], color:'#0369A1'}
+  ]
+});
+
+// ============= 11. WILLINGNESS =============
+const will = {'ยินดีซื้อเพิ่ม':0, 'ไม่ต้องการซื้อเพิ่ม':0, 'ไม่ระบุ':0};
+SURVEY.forEach(r => {
+  if (r.futurePlan === 'ยินดีซื้อเพิ่ม') will['ยินดีซื้อเพิ่ม']++;
+  else if (r.futurePlan === 'ไม่ต้องการซื้อเพิ่ม') will['ไม่ต้องการซื้อเพิ่ม']++;
+  else will['ไม่ระบุ']++;
+});
+new Chart(document.getElementById('chWill'), {
+  type:'bar',
+  data:{
+    labels:Object.keys(will),
+    datasets:[{
+      label:'จำนวนคน',
+      data:Object.values(will),
+      backgroundColor:[PAL[1],PAL[6],PAL[3]],
+      borderRadius:6, borderSkipped:false, maxBarThickness:64
+    }]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      datalabels:{display:true, anchor:'end', align:'end', offset:8,
+        color:INK, font:{weight:'600',size:14, family:"'Prompt', sans-serif"}, formatter:v=>v+' คน'}
+    },
+    scales:{
+      x:{beginAtZero:true, max:6, grid:{color:'#F1F5F9'}, ticks:{stepSize:1}},
+      y:{grid:{display:false}, ticks:{color:INK, font:{weight:'500',size:13}}}
+    }
+  }
+});
+
+// ============= RESPONSES TABLE =============
+const list = document.getElementById('respList');
+SURVEY.forEach(r => {
+  const tagsArr = (arr) => arr.length ? arr.map(t=>`<span class="pill">${t}</span>`).join('') : '<span class="pill">—</span>';
+  const diskPill = r.disk==='เพียงพอ'
+    ? '<span class="pill ok">✓ เพียงพอ</span>'
+    : '<span class="pill warn">✗ ไม่เพียงพอ</span>';
+  const nasPill = r.nasUse==='เคยใช้งาน'
+    ? '<span class="pill ok">✓ เคยใช้ NAS</span>'
+    : '<span class="pill warn">✗ ไม่เคยใช้ NAS</span>';
+  list.insertAdjacentHTML('beforeend', `
+    <div class="resp">
+      <div class="resp-head">
+        <div class="nm"><span class="id">#${String(r.id).padStart(2,'0')}</span>${r.dept}</div>
+        <div class="dept">${diskPill} ${nasPill}</div>
+      </div>
+      <div class="resp-row"><div class="k">วิธีทำงานหลัก</div><div class="v">${tagsArr(r.method)}</div></div>
+      <div class="resp-row"><div class="k">เหตุผลที่เลือก</div><div class="v">${tagsArr(r.reasons)}</div></div>
+      <div class="resp-row"><div class="k">Cloud ใช้แบบ</div><div class="v">${r.cloud}</div></div>
+      <div class="resp-row"><div class="k">จ่ายเงิน/เพิ่มความจุ</div><div class="v">${r.spend} · ${r.capacity}</div></div>
+      <div class="resp-row"><div class="k">พอใช้หรือไม่</div><div class="v">${r.sufficient}</div></div>
+      <div class="resp-row"><div class="k">ไฟล์ที่ใช้พื้นที่มาก</div><div class="v">${tagsArr(r.fileTypes)}</div></div>
+      <div class="resp-row"><div class="k">จำรหัส NAS</div><div class="v">${r.nasPwd}</div></div>
+      <div class="resp-row"><div class="k">อุปสรรค NAS</div><div class="v">${tagsArr(r.nasIssues)}</div></div>
+      <div class="resp-row"><div class="k">แผนซื้อเพิ่ม</div><div class="v">${r.futurePlan}</div></div>
+      <div class="resp-row"><div class="k">ข้อเสนอแนะ</div><div class="v">${r.suggest}</div></div>
+    </div>
+  `);
+});
+</script>
+
+</body>
+</html>
